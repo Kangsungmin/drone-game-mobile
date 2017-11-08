@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: a4f9db228b37eeb4dbf4881119baa29d
+timeCreated: 1503827905
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: FoglihtenBlackPcs
+  fontNames:
+  - FoglihtenBlackPcs
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

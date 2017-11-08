@@ -1,0 +1,174 @@
+fileFormatVersion: 2
+guid: 358c9ec4dafdee54aa566b729a694ba1
+timeCreated: 1438287248
+licenseType: Store
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Umano_Magro__americano_:Back_1
+    100002: Umano_Magro__americano_:Back_2
+    100004: Umano_Magro__americano_:Back_3
+    100006: Umano_Magro__americano_:Back_4
+    100008: Umano_Magro__americano_:Back_stabilize
+    100010: Umano_Magro__americano_:cinese1
+    100012: Umano_Magro__americano_:cinese2
+    100014: Umano_Magro__americano_:controls
+    100016: Umano_Magro__americano_:corpo
+    100018: Umano_Magro__americano_:corpo1
+    100020: Umano_Magro__americano_:egiziano1
+    100022: Umano_Magro__americano_:egiziano2
+    100024: Umano_Magro__americano_:Head
+    100026: Umano_Magro__americano_:Head_end
+    100028: Umano_Magro__americano_:italiano1
+    100030: Umano_Magro__americano_:italiano2
+    100032: Umano_Magro__americano_:L_BoundAnkle
+    100034: Umano_Magro__americano_:L_BoundBall
+    100036: Umano_Magro__americano_:L_BoundBicep
+    100038: Umano_Magro__americano_:L_BoundElbow
+    100040: Umano_Magro__americano_:L_BoundForearm
+    100042: Umano_Magro__americano_:L_BoundHip
+    100044: Umano_Magro__americano_:L_BoundKnee
+    100046: Umano_Magro__americano_:L_BoundPalm
+    100048: Umano_Magro__americano_:L_BoundToe
+    100050: Umano_Magro__americano_:L_BoundWrist
+    100052: Umano_Magro__americano_:L_Clavicle
+    100054: Umano_Magro__americano_:model
+    100056: Umano_Magro__americano_:Neck
+    100058: Umano_Magro__americano_:Pelvis
+    100060: Umano_Magro__americano_:R_BoundAnkle
+    100062: Umano_Magro__americano_:R_BoundBall
+    100064: Umano_Magro__americano_:R_BoundBicep
+    100066: Umano_Magro__americano_:R_BoundElbow
+    100068: Umano_Magro__americano_:R_BoundForearm
+    100070: Umano_Magro__americano_:R_BoundHip
+    100072: Umano_Magro__americano_:R_BoundKnee
+    100074: Umano_Magro__americano_:R_BoundPalm
+    100076: Umano_Magro__americano_:R_BoundToe
+    100078: Umano_Magro__americano_:R_BoundWrist
+    100080: Umano_Magro__americano_:R_Clavicle
+    100082: Umano_Magro__americano_:skeleton
+    100084: Umano_Magro__americano_:superMover
+    100086: //RootNode
+    400000: Umano_Magro__americano_:Back_1
+    400002: Umano_Magro__americano_:Back_2
+    400004: Umano_Magro__americano_:Back_3
+    400006: Umano_Magro__americano_:Back_4
+    400008: Umano_Magro__americano_:Back_stabilize
+    400010: Umano_Magro__americano_:cinese1
+    400012: Umano_Magro__americano_:cinese2
+    400014: Umano_Magro__americano_:controls
+    400016: Umano_Magro__americano_:corpo
+    400018: Umano_Magro__americano_:corpo1
+    400020: Umano_Magro__americano_:egiziano1
+    400022: Umano_Magro__americano_:egiziano2
+    400024: Umano_Magro__americano_:Head
+    400026: Umano_Magro__americano_:Head_end
+    400028: Umano_Magro__americano_:italiano1
+    400030: Umano_Magro__americano_:italiano2
+    400032: Umano_Magro__americano_:L_BoundAnkle
+    400034: Umano_Magro__americano_:L_BoundBall
+    400036: Umano_Magro__americano_:L_BoundBicep
+    400038: Umano_Magro__americano_:L_BoundElbow
+    400040: Umano_Magro__americano_:L_BoundForearm
+    400042: Umano_Magro__americano_:L_BoundHip
+    400044: Umano_Magro__americano_:L_BoundKnee
+    400046: Umano_Magro__americano_:L_BoundPalm
+    400048: Umano_Magro__americano_:L_BoundToe
+    400050: Umano_Magro__americano_:L_BoundWrist
+    400052: Umano_Magro__americano_:L_Clavicle
+    400054: Umano_Magro__americano_:model
+    400056: Umano_Magro__americano_:Neck
+    400058: Umano_Magro__americano_:Pelvis
+    400060: Umano_Magro__americano_:R_BoundAnkle
+    400062: Umano_Magro__americano_:R_BoundBall
+    400064: Umano_Magro__americano_:R_BoundBicep
+    400066: Umano_Magro__americano_:R_BoundElbow
+    400068: Umano_Magro__americano_:R_BoundForearm
+    400070: Umano_Magro__americano_:R_BoundHip
+    400072: Umano_Magro__americano_:R_BoundKnee
+    400074: Umano_Magro__americano_:R_BoundPalm
+    400076: Umano_Magro__americano_:R_BoundToe
+    400078: Umano_Magro__americano_:R_BoundWrist
+    400080: Umano_Magro__americano_:R_Clavicle
+    400082: Umano_Magro__americano_:skeleton
+    400084: Umano_Magro__americano_:superMover
+    400086: //RootNode
+    4300000: Umano_Magro__americano_:corpo
+    4300002: Umano_Magro__americano_:corpo1
+    4300004: Umano_Magro__americano_:egiziano1
+    4300006: Umano_Magro__americano_:egiziano2
+    4300008: Umano_Magro__americano_:cinese1
+    4300010: Umano_Magro__americano_:cinese2
+    4300012: Umano_Magro__americano_:italiano2
+    4300014: Umano_Magro__americano_:italiano1
+    9500000: //RootNode
+    13700000: Umano_Magro__americano_:cinese1
+    13700002: Umano_Magro__americano_:cinese2
+    13700004: Umano_Magro__americano_:corpo
+    13700006: Umano_Magro__americano_:corpo1
+    13700008: Umano_Magro__americano_:egiziano1
+    13700010: Umano_Magro__americano_:egiziano2
+    13700012: Umano_Magro__americano_:italiano1
+    13700014: Umano_Magro__americano_:italiano2
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 180
+    splitTangentsAcrossUV: 1
+    normalImportMode: 1
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

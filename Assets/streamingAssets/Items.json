@@ -1,0 +1,20 @@
+[
+  {
+    "ID": 0,
+    "Title": "pizza",
+    "Value": 1,
+    "Slug": "Item_pizza"
+  },
+  {
+    "ID": 1,
+    "Title": "Brushed_Motor",
+    "Value": 1,
+    "Slug": "Brushed_motor"
+  },
+  {
+    "ID": 2,
+    "Title": "Propeller",
+    "Value": 1,
+    "Slug": "Propeller"
+  }
+]

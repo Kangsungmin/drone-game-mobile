@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: e6c0a56ef7ed00a4bb54bd085fca8115
+timeCreated: 1490662000
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 25
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Transponder AOE
+  fontNames:
+  - Transponder AOE
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

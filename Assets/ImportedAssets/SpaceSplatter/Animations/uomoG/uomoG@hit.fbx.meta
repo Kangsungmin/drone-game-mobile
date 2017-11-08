@@ -1,0 +1,141 @@
+fileFormatVersion: 2
+guid: 618bf9638029d1d4ab3321e9887882d3
+timeCreated: 1438287246
+licenseType: Store
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Umano_Grosso__americano_:Back_1
+    100002: Umano_Grosso__americano_:Back_2
+    100004: Umano_Grosso__americano_:Back_3
+    100006: Umano_Grosso__americano_:Back_4
+    100008: Umano_Grosso__americano_:Back_stabilize
+    100010: Umano_Grosso__americano_:controls
+    100012: Umano_Grosso__americano_:Head
+    100014: Umano_Grosso__americano_:Head_end
+    100016: Umano_Grosso__americano_:L_BoundAnkle
+    100018: Umano_Grosso__americano_:L_BoundBall
+    100020: Umano_Grosso__americano_:L_BoundBicep
+    100022: Umano_Grosso__americano_:L_BoundElbow
+    100024: Umano_Grosso__americano_:L_BoundForearm
+    100026: Umano_Grosso__americano_:L_BoundHip
+    100028: Umano_Grosso__americano_:L_BoundKnee
+    100030: Umano_Grosso__americano_:L_BoundPalm
+    100032: Umano_Grosso__americano_:L_BoundToe
+    100034: Umano_Grosso__americano_:L_BoundWrist
+    100036: Umano_Grosso__americano_:L_Clavicle
+    100038: Umano_Grosso__americano_:Neck
+    100040: Umano_Grosso__americano_:Pelvis
+    100042: Umano_Grosso__americano_:R_BoundAnkle
+    100044: Umano_Grosso__americano_:R_BoundBall
+    100046: Umano_Grosso__americano_:R_BoundBicep
+    100048: Umano_Grosso__americano_:R_BoundElbow
+    100050: Umano_Grosso__americano_:R_BoundForearm
+    100052: Umano_Grosso__americano_:R_BoundHip
+    100054: Umano_Grosso__americano_:R_BoundKnee
+    100056: Umano_Grosso__americano_:R_BoundPalm
+    100058: Umano_Grosso__americano_:R_BoundToe
+    100060: Umano_Grosso__americano_:R_BoundWrist
+    100062: Umano_Grosso__americano_:R_Clavicle
+    100064: Umano_Grosso__americano_:skeleton
+    100066: Umano_Grosso__americano_:superMover
+    100068: //RootNode
+    400000: Umano_Grosso__americano_:Back_1
+    400002: Umano_Grosso__americano_:Back_2
+    400004: Umano_Grosso__americano_:Back_3
+    400006: Umano_Grosso__americano_:Back_4
+    400008: Umano_Grosso__americano_:Back_stabilize
+    400010: Umano_Grosso__americano_:controls
+    400012: Umano_Grosso__americano_:Head
+    400014: Umano_Grosso__americano_:Head_end
+    400016: Umano_Grosso__americano_:L_BoundAnkle
+    400018: Umano_Grosso__americano_:L_BoundBall
+    400020: Umano_Grosso__americano_:L_BoundBicep
+    400022: Umano_Grosso__americano_:L_BoundElbow
+    400024: Umano_Grosso__americano_:L_BoundForearm
+    400026: Umano_Grosso__americano_:L_BoundHip
+    400028: Umano_Grosso__americano_:L_BoundKnee
+    400030: Umano_Grosso__americano_:L_BoundPalm
+    400032: Umano_Grosso__americano_:L_BoundToe
+    400034: Umano_Grosso__americano_:L_BoundWrist
+    400036: Umano_Grosso__americano_:L_Clavicle
+    400038: Umano_Grosso__americano_:Neck
+    400040: Umano_Grosso__americano_:Pelvis
+    400042: Umano_Grosso__americano_:R_BoundAnkle
+    400044: Umano_Grosso__americano_:R_BoundBall
+    400046: Umano_Grosso__americano_:R_BoundBicep
+    400048: Umano_Grosso__americano_:R_BoundElbow
+    400050: Umano_Grosso__americano_:R_BoundForearm
+    400052: Umano_Grosso__americano_:R_BoundHip
+    400054: Umano_Grosso__americano_:R_BoundKnee
+    400056: Umano_Grosso__americano_:R_BoundPalm
+    400058: Umano_Grosso__americano_:R_BoundToe
+    400060: Umano_Grosso__americano_:R_BoundWrist
+    400062: Umano_Grosso__americano_:R_Clavicle
+    400064: Umano_Grosso__americano_:skeleton
+    400066: Umano_Grosso__americano_:superMover
+    400068: //RootNode
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
