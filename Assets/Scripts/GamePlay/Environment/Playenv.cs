@@ -19,7 +19,8 @@ public class Playenv : MonoBehaviour
     GameObject DroneBoxSearcher;
     public Text MissionExplainText;
     public static int SpawnBoxCount;
-    public int MissionCount;//상자를 넣은 수.
+    //public int MissionCount;//상자를 넣은 수.
+    public int MissionScore;
     public int AmountMoney;//획득한 돈
     //public List<int> NowGetParts = new List<int>();
     public Dictionary<int, int> NowGetParts = new Dictionary<int, int>(); //<Key, value>
@@ -41,7 +42,8 @@ public class Playenv : MonoBehaviour
         Time.timeScale = 1;
         GameOver = false;
         SpawnBoxCount = 0;
-        MissionCount = 0;
+        //MissionCount = 0;
+        MissionScore = 0;
         Screen.SetResolution(1280, 800, true);
         UIManager = GameObject.Find("UI").GetComponent<UIscripts>();
         AllNpc = GameObject.Find("KeyNpcs");
@@ -109,10 +111,9 @@ public class Playenv : MonoBehaviour
 
     void Update()
     {
-        if (StageLevel != 1)
+        /*
+        if (SpawnBoxCount < 20)
         {
-            if (SpawnBoxCount < 20)
-            {
                 //현재 맵에 gen된 상자의 수를 확인한다. 일정 수 이하면 박스를 랜덤한 맵 위치에 생성한다.
                 Vector3 BoxSpawnPos = new Vector3(Random.Range(-170.0f, 170.0f), 79.0f, Random.Range(-170.0f, 170.0f));
                 GameObject obj = Instantiate(ItemBox, BoxSpawnPos, Quaternion.identity);//랜덤한 위치에 박스 생성
@@ -124,16 +125,8 @@ public class Playenv : MonoBehaviour
                 Vector3 ItemClusterSpawnPos = new Vector3(Random.Range(-170.0f, 170.0f), 79.0f, Random.Range(-170.0f, 170.0f));
                 obj = Instantiate(ItemCluster, ItemClusterSpawnPos, Quaternion.identity);//랜덤한 위치에 박스 생성
                 obj.name = "ItemCluster";
-            }
         }
-        else//튜토리얼 일때
-        {
-            if (MissionCount > 0)
-            {
-                GameEnd();
-                MissionCount = -1;
-            }
-        }
+        */
     }
     //==============================미션 클리어[시작]====================================
     public void MissionEnd(int Rate, int getExp, int amountMoney, Dictionary<int, int> getPartID)
@@ -201,23 +194,12 @@ public class Playenv : MonoBehaviour
                 //미션 완료 검사
                 {
                     int getScore, getExp;
-                    if (MissionCount > PlayerDataManager.level * 2) //유저 Lev*2 이상일 시 3최상
+                    if (AmountMoney > PlayerDataManager.level * 15) //유저 Lev*2 이상일 시 3최상
                     {
                         getScore = 3;
-                        getExp = 5 * MissionCount;
+                        getExp = 5 * AmountMoney;
                     }
-                    else if (MissionCount > PlayerDataManager.level * 1.5) //유저 Lev*1.5 이상일 시 2
-                    {
-                        getScore = 2;
-                        getExp = 5 * MissionCount;
-                    }
-                    else if (MissionCount > 1) //1개이상 넣을 시
-                    {
-                        getScore = 1;
-                        getExp = 5 * MissionCount;
-                    }
-                    else
-                    {
+                    else {
                         getScore = 0;
                         getExp = 0;
                     }
@@ -238,6 +220,12 @@ public class Playenv : MonoBehaviour
     {
         GameObject.Find("UI").SendMessage("PlayerDataUiUpdate", NowGetParts);
     }
+    public void IncreaseScore(int amount)
+    {
+        UIManager.IncreaseScoreAni();
+        MissionScore += amount;
+    }
+
     public void MoneyPlus(int getMoney)
     {
         AmountMoney += getMoney;
@@ -251,9 +239,8 @@ public class Playenv : MonoBehaviour
             //NowGetParts.Add(PartIdList[i], NowGetParts[i]++ );// i번 아이템을 +1 한다.
             NowGetParts[PartIdList[i]] = NowGetParts[PartIdList[i]] + 1;
         }
-        foreach (KeyValuePair<int,int> getparts in NowGetParts) {
-            print("얻은 파츠 : " + NowGetParts[getparts.Key]);
-        }
+        //튜토리얼일 때, 바로 게임 종료시킴
+        if(StageLevel == 1) GameEnd();
     }
     public void ExplainOk()
     {
@@ -268,8 +255,6 @@ public class Playenv : MonoBehaviour
 
     public void startMenu()
     {
-
-        print("메뉴 씬 호출");
         Application.LoadLevel("Menu");
     }
 
@@ -278,12 +263,11 @@ public class Playenv : MonoBehaviour
         Time.timeScale = 1;
         UIManager.PauseMenu.SetActive(false);
         PlayerDrone.GetComponent<Rigidbody>().isKinematic = true;
-        int getScore, getExp, getMoney;
+        int getScore, getExp;
         getScore = 3;
-        getExp = 25;
-        getMoney = 10;
-        UIManager.MissionEnd(getScore, getExp, getMoney, NowGetParts); //점수,exp, money
-        MissionEnd(getScore, getExp, getMoney, NowGetParts);
+        getExp = (int)(MissionScore * 0.1f);
+        UIManager.MissionEnd(getScore, getExp, AmountMoney, NowGetParts); //점수,exp, money
+        MissionEnd(getScore, getExp, AmountMoney, NowGetParts);
     }
 
     public void retrytGame()

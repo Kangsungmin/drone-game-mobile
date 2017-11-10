@@ -5,19 +5,28 @@ using UnityEngine.UI;
 using System.Diagnostics;
 
 public class UIscripts : MonoBehaviour {
-    GameObject Player, PlayEnvironment;
+    GameObject Player;
+    Playenv PlayEnvironment;
     //=====튜토리얼 변수=======//
     public GameObject TutorialPanel, TutorialButton;
     public int TutorialCount;
     //=====튜토리얼 변수=======//
+
+    //=====스코어 변수=========//
+    public Text ScoreText;
+    public Animator ScoreAni;
+    //=====스코어 변수=========//
+
     public SceneFader SceneFadeManager;
-    public GameObject damagedImg, PauseMenu;
+    public GameObject PauseMenu;
     public GameObject MissonBackground, Title_Mission, Title_Clear, SubTitle, MissionClearPanel, MissionPanelButtons;
     public GameObject RatingView, MissionClearView;
     public Image fireBtn, joystickLeft, joystickRight;
     //private float health = 100.0f, maxHealth = 100.0f;
     private float fuel = 100.0f, maxFuel = 100.0f;
-    Image healthBar, fuelBar;
+    Image fuelBar;
+
+    
     public Text MissionClearEnglish, MissionClearKorean;
     //스톱워치
     bool MissonEnd;
@@ -32,10 +41,10 @@ public class UIscripts : MonoBehaviour {
     void Start ()
     {
 		Player = GameObject.FindGameObjectWithTag ("Player");
-        PlayEnvironment = GameObject.Find("PlayEnvironment");
-        healthBar = transform.Find("HP").Find("HP_bar").GetComponent<Image>();
+        PlayEnvironment = GameObject.Find("PlayEnvironment").GetComponent<Playenv>();
+        //healthBar = transform.Find("HP").Find("HP_bar").GetComponent<Image>();
         fuelBar = transform.Find("FUEL").Find("Fuel_bar").GetComponent<Image>();
-        damagedImg.SetActive(false);
+        
         //현재 튜토리얼이면 튜토리얼 패널 활성화
         if (PlayEnvironment.GetComponent<Playenv>().StageLevel == 1)
         {
@@ -49,26 +58,20 @@ public class UIscripts : MonoBehaviour {
     void Update () {
         if (!Playenv.GameOver)
         {
-            //health = Player.gameObject.GetComponent<Drone>().Hp;
+            ScoreText.text = PlayEnvironment.MissionScore.ToString();
             fuel = Player.gameObject.GetComponent<Drone>().Fuel;
             //healthBar.fillAmount = (float)health / (float)maxHealth;
             fuelBar.fillAmount = (float)fuel / (float)maxFuel;
             if (fuel <= 0.0f)//게임종료
             {
                 //PlayEnvironment에 제한시간 종료 알림.
-                PlayEnvironment.SendMessage("GameEnd");
+                PlayEnvironment.GameEnd();
             }
             else if (MissonEnd)//미션 종료시
             {
                 Player.GetComponent<Rigidbody>().isKinematic = true;//드론 멈춤
                 Player.GetComponent<Drone>().DronePowerOn = false;
             }
-            //else CountDown -= Time.deltaTime;//1초씩 감소
-
-            //TimeView.text = (int)CountDown + "초 남았습니다.";
-            //if (CountDown < 20) TimeView.color = Color.red;
-            //else TimeView.color = Color.white;
-            //TimeView.GetComponent<Text>().text = stopwatch.Elapsed.Minutes + " : " + stopwatch.Elapsed.Seconds + " : " + stopwatch.Elapsed.Milliseconds / 100;
         }
 
     }
@@ -122,16 +125,13 @@ public class UIscripts : MonoBehaviour {
         reservedObject.SetActive(true);
     }
 
-    public void damageAni()
+    public void IncreaseScoreAni()
     {
-        damagedImg.SetActive(true);
-        Invoke("DamageEnd",1.0f);
+        //ScoreAni.SetBool("INC", true);
+        ScoreAni.Play("IncreaseScore", 0, 0.0f);
+        //ScoreAni.SetBool("INC", false);
     }
-
-    void DamageEnd()
-    {
-        damagedImg.SetActive(false);
-    }
+    
 
     public void OnPause()
     {

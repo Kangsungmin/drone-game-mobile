@@ -9,13 +9,10 @@ public class LoadManager : MonoBehaviour
     bool LoadDialog = false;
     string Result_DB="";
 
-
-
     void Start()
     {
         StartCoroutine(Load_Data());
         StartCoroutine(DBLoad());
-       
     }
 
     // Update is called once per frame

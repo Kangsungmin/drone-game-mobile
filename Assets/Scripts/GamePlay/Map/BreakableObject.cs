@@ -3,32 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BreakableObject : MonoBehaviour {
+    
     Animator ObjectAni;
-    public DropItem dropItem;
-    // Use this for initialization
+    GameObject dropItem;
+    public bool isBreakable;
+    public Playenv playEnvironment;
 
     private void Awake()
     {
         ObjectAni = GetComponent<Animator>();
-        
+        isBreakable = true;
+        if (transform.parent != null) setComponent();
     }
-    /*
-    void OnTriggerEnter(Collider col)
+    public void setComponent()
     {
-        if (col.tag.Contains("Player"))
-        {
-            ObjectAni.SetBool("IsBreak", true);
-        }
-    }*/
+        dropItem = transform.parent.GetChild(1).gameObject;
+    }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag.Contains("Player"))
+        if (collision.gameObject.tag.Contains("Player") && isBreakable)
         {
-            gameObject.GetComponent<BoxCollider>().isTrigger = true;
+            playEnvironment.IncreaseScore(9);
+            isBreakable = false;
+            //gameObject.GetComponent<BoxCollider>().isTrigger = true;
             ObjectAni.SetBool("IsBreak", true);
-            dropItem.GenerateItem();
+            dropItem.SendMessage("GenerateItem");
+            transform.parent.SendMessage("Restore");
+            StartCoroutine(ActiveCTRL());
+            
         }
     }
+    IEnumerator ActiveCTRL()
+    {
+        yield return new WaitForSeconds(3.0f);
+        gameObject.SetActive(false);
+    }
+
 
 }

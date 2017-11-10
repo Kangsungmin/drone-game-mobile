@@ -5,7 +5,7 @@ using UnityEngine;
 public class BeginnerDrone : Drone
 {
     public ParticleSystem grabEffect, GoalInEffect, ElecEffect;
-    float endX, endZ;
+    float endX, endY ,endZ;
 
     void Awake()
     {
@@ -85,11 +85,12 @@ public class BeginnerDrone : Drone
         if (Vector3.Distance(transform.position, Vector3.zero) < 242.0f)
         {
             endX = transform.position.x;
+            endY = transform.position.y;
             endZ = transform.position.z;
         }
         else if (Vector3.Distance(transform.position, Vector3.zero) > 245.0f)
         {
-            Vector3 setPos = new Vector3(endX - 1, transform.position.y, endZ - 1);
+            Vector3 setPos = new Vector3(endX - 1, endY - 1, endZ - 1);
             transform.position = setPos;
         }
         //============================이동구간[끝]=====================================
@@ -133,7 +134,7 @@ public class BeginnerDrone : Drone
         {
             if (Thrust >= 0)
             {
-                Thrust += 10 * Up;
+                Thrust += 20 * Up;
             }
             else
             {
@@ -223,21 +224,6 @@ public class BeginnerDrone : Drone
     }
     //=============================연료 충전함수[끝]===============================
 
-   
-    //=============================드론 공격받음[시작]=============================
-    /*
-    public override void Hit(int damage)
-    {
-        UIManager.gameObject.GetComponent<UIscripts>().damageAni();
-        Hp -= damage;
-        if (Hp <= 0)
-        {
-            GameOver = true;
-            DronePowerOn = false;
-        }
-    }
-    */
-    //=============================드론 공격받음[끝]===============================
 
     public override void GrabSomthing(GameObject targetObject)//물건을 집는 메소드
     {
@@ -274,39 +260,13 @@ public class BeginnerDrone : Drone
     public void GrabParticlePlay()
     {
         grabEffect.Play();
-        //1.5초 후에 stop예약
-        //IEnumerator coroutine = ParticleStop(1.5f);
-        //StartCoroutine(coroutine);
+
     }
     public void GoalInParticlePlay()
     {
         GoalInEffect.Play();
     }
 
-    Vector3[] rayCasting()
-    {
-        Vector3[] val = new Vector3[2];
-        val[0] = new Vector3(0, 0, 0);
-        val[1] = Claw.transform.position;//집게 위치
-        Ray ray = new Ray(Claw.position, Claw.forward);
-        RaycastHit hitObject;
-        if (Physics.Raycast(ray, out hitObject, 3.0f))
-        {
-            print(hitObject.transform);
-            if (hitObject.transform.tag.Contains("Box"))
-            {
-                hitObject.transform.GetComponent<BoxCollider>().enabled = false;
-                hitObject.transform.GetComponent<Rigidbody>().isKinematic = true;
-                hitObject.transform.SetParent(transform);
-                OnGrab.grabState = "Using";
-                val[0] = hitObject.transform.GetComponent<Renderer>().bounds.size;//박스 사이즈
-                val[1] = hitObject.transform.position;//박스 위치
-                return val;//물건의 사이즈의 포지션을 리턴
-            }
-            else return val;
-        }
-        else return val;
-    }
 
 
 }

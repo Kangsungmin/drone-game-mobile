@@ -13,11 +13,10 @@ public class DropItem : MonoBehaviour {
     }
     public void GenerateItem()
     {
-        for (int i=0; i<3; i++)
+        for (int i=0; i<6; i++)
         {
             transform.Rotate(Vector3.up * Random.Range(0, 360));
-            Instantiate(drop, transform.position, transform.rotation);
+            GameObject instance = Instantiate(drop, transform.position, transform.rotation);
         }
-
     }
 }
