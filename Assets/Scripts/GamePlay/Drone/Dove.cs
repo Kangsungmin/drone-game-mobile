@@ -314,6 +314,7 @@ public class Dove : Drone
         //수정후
         //인자로 받아온 오브젝트의 사이즈를 구한다.
         //claw + 오브젝트 높이 의 위치 아래 오브젝트를 가져온다
+        playEnvironment.GetComponent<Playenv>().ActiveArrowToDestination();
         targetObject.transform.GetComponent<BoxCollider>().enabled = false;
         targetObject.transform.GetComponent<Rigidbody>().isKinematic = true;
         Vector3 size = targetObject.transform.GetComponent<Renderer>().bounds.size;

@@ -4,6 +4,9 @@ using UnityEngine;
 using Facebook.Unity;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+
 
 public class FBmanager : MonoBehaviour {
 
@@ -21,22 +24,45 @@ public class FBmanager : MonoBehaviour {
 
 	public Canvas nicknamecanvas;
 
+    
+
     void Awake()
     {
         FB.Init(InitCompleteCallback,UnityCallbackDelegate);
+
+        // googleplay part start
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
+        PlayGamesPlatform.InitializeInstance(config);
+        GooglePlayGames.PlayGamesPlatform.DebugLogEnabled = false;
+        PlayGamesPlatform.Activate();
+        // googleplay part finish
     }
 
-    public void LoginButton()
+    public void LoginButton(int login_number)
     {
-        if (!FB.IsLoggedIn)
-        {
-            FB.LogInWithReadPermissions(Perms, LoginCallback);
+        // facebook과 googleplay 각각 로그아웃 방법이 다르기 때문에
+        // 어떤 방식으로 로그인 했는지 저장.
+        PlayerPrefs.SetInt("login_platform", login_number);
 
-        }
-        else
+        if (login_number == 1)
         {
-            Debug.LogError("user is logging");
-			txt.text = "User is logging";
+
+            // facebook 로그인 버튼 클릭 시
+            if (!FB.IsLoggedIn)
+            {
+                FB.LogInWithReadPermissions(Perms, LoginCallback);
+
+            }
+            else
+            {
+                Debug.LogError("user is logging");
+                txt.text = "User is logging";
+            }
+        }
+        else if (login_number == 2)
+        {
+            // google play 로그인 버튼 클릭 시
+            Social.localUser.Authenticate(signInCallback);
         }
     }
 
@@ -173,5 +199,18 @@ public class FBmanager : MonoBehaviour {
             Time.timeScale = 0;
         }
     }
+
+    private void signInCallback(bool success)
+    {
+        if (success)
+        {
+            userid = Social.localUser.id;
+            txt.text = "Hi, " + userid;
+            StartCoroutine(Connect_Login());
+        }
+        else
+            txt.text = "SignIn Fail!!";
+    }
+
     #endregion
 }

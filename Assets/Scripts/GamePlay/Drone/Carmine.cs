@@ -11,10 +11,10 @@ public class Carmine : Drone
 
     void Awake()
     {
+        Max_Fuel = 240.0f;
+        Fuel = 240.0f;
         Speed = 130;
         MaxThrust = 260;
-        Max_Fuel = 125;
-        Fuel = Max_Fuel;
         thisRB = GetComponent<Rigidbody>();
     }
     void Start()
@@ -214,10 +214,10 @@ public class Carmine : Drone
         {
             GameOver = true;//게임 종료
             DronePowerOn = false;
+            Playenv.GameOver = true;
+            playEnvironment.GetComponent<Playenv>().GameEnd();//게임종료시킴
         }
-        else if (Thrust > 20) Fuel -= 1.0f;       //연료가 남아있을 때 감소시킨다.
-        if (Fuel <= 0) GameOver = true;
-
+        else if (Thrust > 20 && DronePowerOn) Fuel -= 1.0f;       //연료가 남아있을 때 감소시킨다.
 
         yield return new WaitForSeconds(1.0f);//해당 메소드에 1초 지연을 시킨다.
         fuelDelay = true;
@@ -281,6 +281,7 @@ public class Carmine : Drone
         //수정후
         //인자로 받아온 오브젝트의 사이즈를 구한다.
         //claw + 오브젝트 높이 의 위치 아래 오브젝트를 가져온다
+        playEnvironment.GetComponent<Playenv>().ActiveArrowToDestination();
         targetObject.transform.GetComponent<BoxCollider>().enabled = false;
         targetObject.transform.GetComponent<Rigidbody>().isKinematic = true;
         Vector3 size = targetObject.transform.GetComponent<Renderer>().bounds.size;
@@ -298,6 +299,7 @@ public class Carmine : Drone
     {
         if (transform.childCount >= 5)
         {
+            playEnvironment.GetComponent<Playenv>().ArrowOff(false);
             GetComponent<Rigidbody>().mass -= transform.GetChild(4).GetComponent<Rigidbody>().mass;
             transform.GetChild(4).GetComponent<BoxCollider>().enabled = true;
             transform.GetChild(4).GetComponent<Rigidbody>().isKinematic = false;

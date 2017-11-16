@@ -17,9 +17,7 @@ public class TutorialArrow : MonoBehaviour
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").transform;
-        Target = GameObject.FindGameObjectWithTag("Box").transform;
         UIManager = GameObject.Find("UI");
-
     }
 
     // Update is called once per frame
@@ -27,24 +25,11 @@ public class TutorialArrow : MonoBehaviour
     {
         //플레이어의 위에 따라다닌다.
         transform.position = new Vector3(Player.position.x, Player.position.y + 1.0f, Player.position.z);
-        transform.LookAt(Target.transform);
-        //박스와이 거리가 가까우면 화살표를 끈다
-        float distanceToBox = Vector3.Distance(transform.position, Target.transform.position);
-        if (distanceToBox < range)
-        {
-            //그랩 버튼 튜토리얼을 활성화 시킨다.
-            if (!BoxLiftGuided)
-            {
-                BoxLiftGuided = true;
-                UIManager.SendMessage("TutorialNext");
-            }
-            gameObject.SetActive(false);
-        }
-
+        if(Target != null) transform.LookAt(Target.transform);
     }
 
-    public void ReTargeting(GameObject T)
+    public void ReTargeting(Transform T)
     {
-        Target = T.transform;
+        Target = T;
     }
 }

@@ -29,7 +29,7 @@ public class PlayerDataManager : MonoBehaviour
 	//===========돈, 경험치 수정[시작]==============
 	public void IncreaseMoney(int value)
 	{
-		money = money + value;
+        money += value;
 		PlayerPrefs.SetInt("money", money);
 	}
 

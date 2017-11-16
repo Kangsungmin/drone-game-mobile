@@ -9,6 +9,8 @@ public class BeginnerDrone : Drone
 
     void Awake()
     {
+        Max_Fuel = 50.0f;
+        Fuel = 50.0f;
         Speed = 120;
         MaxThrust = 200.0f;
         thisRB = GetComponent<Rigidbody>();
@@ -108,8 +110,9 @@ public class BeginnerDrone : Drone
         {
             thisRB.AddForce(Vector3.up * Thrust); // Drone의 위(y축)으로 추력만큼 힘을 가한다.
             thisRB.AddRelativeForce(Vector3.forward * Speed * moveJoystickLeft.Vertical());
+            if (fuelDelay) StartCoroutine("fuelControl");
         }
-        if (fuelDelay) StartCoroutine("fuelControl");
+        
     }
 
     void Animations()
@@ -170,6 +173,17 @@ public class BeginnerDrone : Drone
         {
             //박스는 무시
         }
+        else if (collision.gameObject.tag.Contains("Car"))
+        {
+            /*
+            thisRB.drag = 0.0f;
+            DronePowerOn = false;
+            DroneAnimator.enabled = false;
+            GameOver = true;
+            Playenv.GameOver = true;
+            playEnvironment.GetComponent<Playenv>().GameEnd();//게임종료시킴
+            */
+        }
         else
         {
             float v = thisRB.velocity.magnitude;
@@ -196,11 +210,14 @@ public class BeginnerDrone : Drone
         fuelDelay = false;
         if (Fuel <= 0)
         {
-            GameOver = true;//게임 종료
             DronePowerOn = false;
+            DroneAnimator.enabled = false;
+            GameOver = true;
+            Playenv.GameOver = true;
+            playEnvironment.GetComponent<Playenv>().GameEnd();//게임종료시킴
         }
         else if (Thrust > 20 && DronePowerOn) Fuel -= 1.0f;       //연료가 남아있을 때 감소시킨다.
-        if (Fuel <= 0) GameOver = true;
+
         yield return new WaitForSeconds(1.0f);//해당 메소드에 1초 지연을 시킨다.
         fuelDelay = true;
     }
@@ -230,6 +247,7 @@ public class BeginnerDrone : Drone
         //수정후
         //인자로 받아온 오브젝트의 사이즈를 구한다.
         //claw + 오브젝트 높이 의 위치 아래 오브젝트를 가져온다
+        playEnvironment.GetComponent<Playenv>().ActiveArrowToDestination();
         targetObject.transform.GetComponent<BoxCollider>().enabled = false;
         targetObject.transform.GetComponent<Rigidbody>().isKinematic = true;
         Vector3 size = targetObject.transform.GetComponent<Renderer>().bounds.size;
@@ -242,15 +260,18 @@ public class BeginnerDrone : Drone
         GetComponent<Rigidbody>().mass += targetObject.GetComponent<Rigidbody>().mass;//드론의 무게를 증가시킨다.
         //파티클 실행
         GrabParticlePlay();
+        
     }
     public override void DropSomthing()
     {
-        if (transform.childCount >= 9)
+        if (transform.childCount >= 8)
         {
-            GetComponent<Rigidbody>().mass -= transform.GetChild(8).GetComponent<Rigidbody>().mass;
-            transform.GetChild(8).GetComponent<BoxCollider>().enabled = true;
-            transform.GetChild(8).GetComponent<Rigidbody>().isKinematic = false;
-            transform.GetChild(8).parent = null;//물건 부모해제
+            //가이드 화살표 off
+            playEnvironment.GetComponent<Playenv>().ArrowOff(false);
+            GetComponent<Rigidbody>().mass -= transform.GetChild(7).GetComponent<Rigidbody>().mass;
+            transform.GetChild(7).GetComponent<BoxCollider>().enabled = true;
+            transform.GetChild(7).GetComponent<Rigidbody>().isKinematic = false;
+            transform.GetChild(7).parent = null;//물건 부모해제
         }
         Claw.GetComponent<BoxCollider>().size = new Vector3(0, 0, 0);
         Claw.transform.localPosition = new Vector3(0, 0, 0);

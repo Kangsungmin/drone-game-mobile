@@ -19,12 +19,12 @@ public class UIscripts : MonoBehaviour {
 
     public SceneFader SceneFadeManager;
     public GameObject PauseMenu;
-    public GameObject MissonBackground, Title_Mission, Title_Clear, SubTitle, MissionClearPanel, MissionPanelButtons;
-    public GameObject RatingView, MissionClearView;
+    public GameObject EndViewPanel, EndDataViewPanel, MissionPanelButtons;
+    public GameObject RatingView;
     public Image fireBtn, joystickLeft, joystickRight;
     //private float health = 100.0f, maxHealth = 100.0f;
     private float fuel = 100.0f, maxFuel = 100.0f;
-    Image fuelBar;
+    public Image fuelBar;
 
     
     public Text MissionClearEnglish, MissionClearKorean;
@@ -43,7 +43,6 @@ public class UIscripts : MonoBehaviour {
 		Player = GameObject.FindGameObjectWithTag ("Player");
         PlayEnvironment = GameObject.Find("PlayEnvironment").GetComponent<Playenv>();
         //healthBar = transform.Find("HP").Find("HP_bar").GetComponent<Image>();
-        fuelBar = transform.Find("FUEL").Find("Fuel_bar").GetComponent<Image>();
         
         //현재 튜토리얼이면 튜토리얼 패널 활성화
         if (PlayEnvironment.GetComponent<Playenv>().StageLevel == 1)
@@ -59,42 +58,41 @@ public class UIscripts : MonoBehaviour {
         if (!Playenv.GameOver)
         {
             ScoreText.text = PlayEnvironment.MissionScore.ToString();
-            fuel = Player.gameObject.GetComponent<Drone>().Fuel;
-            //healthBar.fillAmount = (float)health / (float)maxHealth;
+
+            fuel = Player.GetComponent<Drone>().Fuel;
+            maxFuel = Player.GetComponent<Drone>().Max_Fuel;
             fuelBar.fillAmount = (float)fuel / (float)maxFuel;
-            if (fuel <= 0.0f)//게임종료
+            if (MissonEnd)//미션 종료시
             {
-                //PlayEnvironment에 제한시간 종료 알림.
-                PlayEnvironment.GameEnd();
-            }
-            else if (MissonEnd)//미션 종료시
-            {
-                Player.GetComponent<Rigidbody>().isKinematic = true;//드론 멈춤
+                //Player.GetComponent<Rigidbody>().isKinematic = true;//드론 멈춤
                 Player.GetComponent<Drone>().DronePowerOn = false;
             }
+        }
+        else//게임 오버 시,
+        {
+
         }
 
     }
 
-    public void MissionEnd(int Rate, int getExp, int amountMoney, Dictionary<int, int> getPartsList)
+    public void MissionEnd(int Rate, int endScore, int getExp, int amountMoney, Dictionary<int, int> getPartsList)
     {
-        //stopwatch.Reset();
-        //1.백그라운드 활성화
-        MissonBackground.SetActive(true);
-        //2.Mission & Subtitle 활성화 
-        Title_Mission.SetActive(true);
-        SubTitle.SetActive(true);
-        //3.Clear & 패널 활성화 (점차)
-        Title_Clear.SetActive(true);
-        MissionClearPanel.SetActive(true);
+        //게임 결과창 애니메이션
+        /*
+         * 백그라운드 활성화
+         * Mission & Subtitle 활성화 
+         * Clear & 패널 활성화 (점차)
+         */
+        EndDataViewPanel.SetActive(true);
+        EndViewPanel.GetComponent<Animator>().SetBool("Active", true);
         object[] parms = new object[2]{ MissionPanelButtons, 2.3f };
         corutine = UiActiveReserve(parms);
         StartCoroutine(corutine);//미션 버튼 2.5초 후 활성화
-        RatingView.GetComponent<Rating>().SetRate(Rate);//별 개수
-
+        //RatingView.GetComponent<Rating>().SetRate(Rate);//별 개수
+        
         //============보상출력[시작]=================================================
         RatingView.GetComponent<Rating>().SetRate(Rate);//별 개수
-        MissionClearView.GetComponent<MissionReward>().ViewUpdate(SceneData.SceneLevelName, amountMoney, PlayerDataManager.level, PlayerDataManager.exp, getPartsList);//돈과 파츠는 현재 획득한것을 보여준다.
+        EndViewPanel.GetComponent<MissionReward>().ViewUpdate(SceneData.SceneLevelName, endScore, amountMoney, PlayerDataManager.level, getExp, getPartsList);//돈과 파츠는 현재 획득한것을 보여준다.
         //============보상출력[끝]==============================17.11.06 성민 최종수정
         MissonEnd = true;
     }

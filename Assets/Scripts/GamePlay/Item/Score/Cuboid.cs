@@ -24,7 +24,7 @@ public class Cuboid : Item {
         {
             //플레이어가 점수
             playEnvironment.SendMessage("IncreaseScore", thisScore);
-            if (isRegenerable) transform.parent.SendMessage("ReserveReGen", 20.0f);
+            if (isRegenerable) transform.parent.SendMessage("ReserveReGen", 50.0f);
             Target = null;
             gameObject.SetActive(false);
         }

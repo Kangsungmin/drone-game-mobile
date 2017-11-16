@@ -23,7 +23,7 @@ public class Coin : Item {
         {
             //플레이어가 돈을 획득
             playEnvironment.SendMessage("MoneyPlus", 2);
-            if(isRegenerable) transform.parent.SendMessage("ReserveReGen",20.0f);
+            if(isRegenerable) transform.parent.SendMessage("ReserveReGen",50.0f);
             Target = null;
             gameObject.SetActive(false);
         }

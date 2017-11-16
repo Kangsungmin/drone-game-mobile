@@ -11,10 +11,11 @@ public class Spliter : Drone
 
     void Awake()
     {
+        Max_Fuel = 200.0f;
+        Fuel = 200.0f;
         Speed = 150;
         MaxThrust = 220.0f;
-        Max_Fuel = 115.0f;
-        Fuel = Max_Fuel;
+
         thisRB = GetComponent<Rigidbody>();
     }
     void Start()
@@ -169,12 +170,11 @@ public class Spliter : Drone
         {
             if (thisRB.velocity.magnitude > 10.0f)
             {
-                //Hit((int)thisRB.velocity.magnitude);
                 DropSomthing();
             }
             else if (thisRB.velocity.magnitude > 2.5f)
             {
-                //Hit((int)thisRB.velocity.magnitude);
+
             }
             else
             {
@@ -192,9 +192,11 @@ public class Spliter : Drone
         {
             GameOver = true;//게임 종료
             DronePowerOn = false;
+            Playenv.GameOver = true;
+            playEnvironment.GetComponent<Playenv>().GameEnd();//게임종료시킴
         }
         else if (Thrust > 20 && DronePowerOn) Fuel -= 1.0f;       //연료가 남아있을 때 감소시킨다.
-        if (Fuel <= 0) GameOver = true;
+
         yield return new WaitForSeconds(1.0f);//해당 메소드에 1초 지연을 시킨다.
         fuelDelay = true;
     }
@@ -238,6 +240,7 @@ public class Spliter : Drone
         //수정후
         //인자로 받아온 오브젝트의 사이즈를 구한다.
         //claw + 오브젝트 높이 의 위치 아래 오브젝트를 가져온다
+        playEnvironment.GetComponent<Playenv>().ActiveArrowToDestination();
         targetObject.transform.GetComponent<BoxCollider>().enabled = false;
         targetObject.transform.GetComponent<Rigidbody>().isKinematic = true;
         Vector3 size = targetObject.transform.GetComponent<Renderer>().bounds.size;
@@ -255,6 +258,7 @@ public class Spliter : Drone
     {
         if (transform.childCount >= 5)
         {
+            playEnvironment.GetComponent<Playenv>().ArrowOff(false);
             GetComponent<Rigidbody>().mass -= transform.GetChild(4).GetComponent<Rigidbody>().mass;
             transform.GetChild(4).GetComponent<BoxCollider>().enabled = true;
             transform.GetChild(4).GetComponent<Rigidbody>().isKinematic = false;

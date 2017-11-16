@@ -17,7 +17,7 @@ public abstract class Drone : MonoBehaviour {
 
     public int Speed;
     //public float Hp = 100.0f, Max_Hp = 100;
-    public float Fuel = 100.0f, Max_Fuel = 100;
+    public float Fuel = 50.0f, Max_Fuel = 50;
     public float currentY;//currentY : Left조이스틱회전값을 저장하는 변수 
     public float Thrust = 0.000f, hovering_Thrust = 48.031f, MaxThrust = 100.0f;
     public Vector3 wingDir;

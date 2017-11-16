@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelSelector : MonoBehaviour {
     //static SceneData sceneData = new SceneData();
     public SceneFader fader;
+    public Text SpannerView;
 
     public void Select(string Name)//버튼 클릭시.
     {
- //       if (PlayerDataManager.spanner > 0)
-//        {
+        if (PlayerDataManager.spanner > 0)
+        {
             string MapName, Level;
             int index = Name.IndexOf(".");
             MapName = Name.Substring(0, index);
@@ -18,7 +20,7 @@ public class LevelSelector : MonoBehaviour {
             SceneData.sceneData.LoadStage(MapName, Level);
 			StartCoroutine(Update_Spanner_DB(PlayerDataManager.spanner - 1)); // 스페너 감소
             fader.FadeTo(MapName);
-//        }
+        }
        
     }
 
@@ -36,6 +38,7 @@ public class LevelSelector : MonoBehaviour {
 		if (user_Data == "\n1") {
 			print("에코 1받고 spanner 채움");
 			PlayerDataManager.spanner = spanner_num;
+            SpannerView.text = PlayerDataManager.spanner.ToString() + "/10";
 		} else {
 			Debug.Log ("Spanner update failed...");
 		}

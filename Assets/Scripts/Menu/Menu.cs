@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Facebook.Unity;
 using UnityEngine.SceneManagement;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 
 public class Menu : MonoBehaviour {
     public GameObject LevelMenu;
@@ -14,13 +16,34 @@ public class Menu : MonoBehaviour {
 
     //public Text Path;
     //public AudioClip backMusic;
+
+    void Awake()
+    {
+        if (PlayerPrefs.GetInt("login_platform") == 1)
+        {
+            // facebok으로 로그인 한 상태
+            FB.Init();
+        }
+        else if (PlayerPrefs.GetInt("login_platform") == 2)
+        {
+            // google play로 로그인 한 상태
+
+        }
+    }
+
     void Start()
     {
         print(PlayerDataManager.userID + " " + PlayerDataManager.gameID + " " + PlayerDataManager.spanner_time);
-        FB.Init();
 
-        if (PlayerDataManager.spanner != 10)
+        print("스페너 개수" + PlayerDataManager.spanner);
+        if (PlayerDataManager.spanner == 10)
+        {
+            PlayerDataManager.spanner_time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+        }
+        else if (PlayerDataManager.spanner != 10)
+        {
             Update_Spanner();
+        }
 
         //AudioSource.PlayClipAtPoint(backMusic,transform.position);
         //화면 사이즈 적용
@@ -30,12 +53,14 @@ public class Menu : MonoBehaviour {
         // Debug.Log("플레이어 레벨 : " + PlayerDataManager.level);
         // Debug.Log("경험치 : " + PlayerDataManager.exp);
         // Debug.Log("돈 : "+ PlayerDataManager.money);
+    }
 
+    public void Update()
+    {
         MoneyView.text = PlayerDataManager.money.ToString();
         LevelView.text = PlayerDataManager.level.ToString();
         NicknameView.text = PlayerDataManager.gameID;
         SpannerView.text = PlayerDataManager.spanner.ToString() + "/10";
-
     }
     public void SingleplayBtn()
     {
@@ -65,45 +90,59 @@ public class Menu : MonoBehaviour {
     // -------------------------- 스페너 업데이트 ----------------------------------
     void Update_Spanner()
     {
-        print(PlayerDataManager.spanner_time);
+        print("playerdatamaanger의 스페너시간: " + PlayerDataManager.spanner_time);
 
-        int date = int.Parse(PlayerDataManager.spanner_time.Substring(9, 1));
+        int year = int.Parse(PlayerDataManager.spanner_time.Substring(2, 2));
+        int month = int.Parse(PlayerDataManager.spanner_time.Substring(5, 2));
+        int date = int.Parse(PlayerDataManager.spanner_time.Substring(8, 2));
         int h = int.Parse(PlayerDataManager.spanner_time.Substring(11, 2));
         int m = int.Parse(PlayerDataManager.spanner_time.Substring(14, 2));
         int s = int.Parse(PlayerDataManager.spanner_time.Substring(17, 2));
 
-        int time = ((date * 24) + h + 9) * 60 * 60 + m * 60 + s; // 시간을 초로 바꿈.
-
-        print(date + " " + h + " " + m + " " + s + " " + time);
+        int time = h * 60 * 60 + m * 60 + s; // 시간을 초로 바꿈.
 
         string cur_datetime = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-        print(cur_datetime);
-        int cur_date = int.Parse(cur_datetime.Substring(9, 1));
+        print("현재 시스템시간: " + cur_datetime);
 
+        int cur_year = int.Parse(cur_datetime.Substring(2, 2));
+        int cur_month = int.Parse(cur_datetime.Substring(5, 2));
+        int cur_date = int.Parse(cur_datetime.Substring(8, 2));
         int cur_h = int.Parse(cur_datetime.Substring(11, 2));
         int cur_m = int.Parse(cur_datetime.Substring(14, 2));
         int cur_s = int.Parse(cur_datetime.Substring(17, 2));
 
-        int cur_time = ((cur_date * 24) + cur_h) * 60 * 60 + cur_m * 60 + cur_s; // 현재 시간을 초로 바꿈
+        int cur_time = cur_h * 60 * 60 + cur_m * 60 + cur_s; // 현재 시간을 초로 바꿈
 
-        print(cur_date + " " + cur_h + " " + cur_m + " " + cur_s + " " + cur_time);
+        // 1. 년도 비교
+        // 2. 월 비교
+        // 3. 일 비교
+        // 4. 시간 비교
 
-        print("날짜 같고 초계산 시작");
-        // 날짜가 같기 때문에 초로 바꿔 계산
-        int addspanner = (cur_time - time) / 60; // 추가 가능한 스페너 수
-        print("addspanner: " + addspanner);
-        if (PlayerDataManager.spanner + addspanner >= 10)
+        if (cur_year > year || cur_month > month || cur_date > date)
         {
+            // 날짜가 하루이상 지났으므로 스페너 풀로 채움
             print("full로 채워야함");
             StartCoroutine(Update_Spanner_DB(10));
-
         }
         else
         {
-            StartCoroutine(Update_Spanner_DB(PlayerDataManager.spanner + addspanner));
-            print("타이머 처음 호출, 남은시간: " + (float)(cur_time - time) % 60);
-            StartCoroutine(Spanner_Timer(60f - (float)(cur_time - time) % 60));
+            // 시간 비교
+            int addspanner = (cur_time - time) / 60; // 추가 가능한 스페너 수
+            print("addspanner: " + addspanner);
+
+            if (PlayerDataManager.spanner + addspanner >= 10)
+            {
+                print("full로 채워야함");
+                StartCoroutine(Update_Spanner_DB(10));
+            }
+            else
+            {
+                StartCoroutine(Update_Spanner_DB(PlayerDataManager.spanner + addspanner));
+                print("타이머 처음 호출, 남은시간: " + (float)(cur_time - time) % 60);
+                StartCoroutine(Spanner_Timer(60f - (float)(cur_time - time) % 60));
+            }
         }
+        
 
 
     }
@@ -152,7 +191,18 @@ public class Menu : MonoBehaviour {
     {
 
         PlayerPrefs.DeleteAll();
-        FB.LogOut();
+
+        if (PlayerPrefs.GetInt("login_platform") == 1)
+        {
+            // facebook으로 로그인 한 상태
+            FB.LogOut();
+        }
+        else if (PlayerPrefs.GetInt("login_platform") == 2)
+        {
+            // google play로 로그인 한 상태
+            PlayGamesPlatform.Instance.SignOut();
+        }
+        
         SceneManager.LoadScene("flogintest");
     }
 

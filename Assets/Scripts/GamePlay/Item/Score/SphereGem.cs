@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SphereGem : Item {
-
     int thisScore;
     //1의스코어를 얻는다
     private void Awake()
@@ -15,7 +14,7 @@ public class SphereGem : Item {
     {
         if (Target != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, 0.5f);
+            transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, 0.3f);
         }
     }
 
@@ -25,8 +24,9 @@ public class SphereGem : Item {
         {
             //플레이어가 점수
             playEnvironment.SendMessage("IncreaseScore", thisScore);
+            if (isRegenerable) transform.parent.SendMessage("ReserveReGen", 50.0f);
+            Target = null;
             gameObject.SetActive(false);
-            transform.parent.gameObject.SetActive(false);
         }
     }
 
