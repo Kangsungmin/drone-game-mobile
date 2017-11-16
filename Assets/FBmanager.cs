@@ -4,8 +4,8 @@ using UnityEngine;
 using Facebook.Unity;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
+//using GooglePlayGames;
+//using GooglePlayGames.BasicApi;
 
 
 public class FBmanager : MonoBehaviour {
@@ -29,13 +29,13 @@ public class FBmanager : MonoBehaviour {
     void Awake()
     {
         FB.Init(InitCompleteCallback,UnityCallbackDelegate);
-
+        /*
         // googleplay part start
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
         PlayGamesPlatform.InitializeInstance(config);
         GooglePlayGames.PlayGamesPlatform.DebugLogEnabled = false;
         PlayGamesPlatform.Activate();
-        // googleplay part finish
+        // googleplay part finish*/
     }
 
     public void LoginButton(int login_number)
@@ -46,7 +46,7 @@ public class FBmanager : MonoBehaviour {
 
         if (login_number == 1)
         {
-
+            
             // facebook 로그인 버튼 클릭 시
             if (!FB.IsLoggedIn)
             {
@@ -62,7 +62,7 @@ public class FBmanager : MonoBehaviour {
         else if (login_number == 2)
         {
             // google play 로그인 버튼 클릭 시
-            Social.localUser.Authenticate(signInCallback);
+            //Social.localUser.Authenticate(signInCallback);
         }
     }
 
@@ -149,6 +149,7 @@ public class FBmanager : MonoBehaviour {
 	}
 
     #region callback
+    
     private void LoginCallback(IResult result)
     {
         if (result.Cancelled)
@@ -199,7 +200,7 @@ public class FBmanager : MonoBehaviour {
             Time.timeScale = 0;
         }
     }
-
+    /*
     private void signInCallback(bool success)
     {
         if (success)
@@ -211,6 +212,6 @@ public class FBmanager : MonoBehaviour {
         else
             txt.text = "SignIn Fail!!";
     }
-
+    */
     #endregion
 }

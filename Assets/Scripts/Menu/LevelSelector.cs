@@ -10,8 +10,8 @@ public class LevelSelector : MonoBehaviour {
 
     public void Select(string Name)//버튼 클릭시.
     {
-        if (PlayerDataManager.spanner > 0)
-        {
+        //if (PlayerDataManager.spanner > 0)
+        //{
             string MapName, Level;
             int index = Name.IndexOf(".");
             MapName = Name.Substring(0, index);
@@ -20,7 +20,7 @@ public class LevelSelector : MonoBehaviour {
             SceneData.sceneData.LoadStage(MapName, Level);
 			StartCoroutine(Update_Spanner_DB(PlayerDataManager.spanner - 1)); // 스페너 감소
             fader.FadeTo(MapName);
-        }
+        //}
        
     }
 

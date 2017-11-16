@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Facebook.Unity;
 
 public class NewBehaviourScript1 : MonoBehaviour {
     public GameObject InternetNotWorkPopup;

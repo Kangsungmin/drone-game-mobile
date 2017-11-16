@@ -8,7 +8,7 @@ public class Cuboid : Item {
     private void Awake()
     {
         thisScore = 2;
-        playEnvironment = GameObject.Find("PlayEnvironment");
+        playEnvironment = GameObject.FindGameObjectWithTag("ENV");
     }
     void FixedUpdate()
     {

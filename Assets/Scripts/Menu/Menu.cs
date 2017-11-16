@@ -5,8 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Facebook.Unity;
 using UnityEngine.SceneManagement;
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
+//using GooglePlayGames;
+//using GooglePlayGames.BasicApi;
 
 public class Menu : MonoBehaviour {
     public GameObject LevelMenu;
@@ -26,8 +26,13 @@ public class Menu : MonoBehaviour {
         }
         else if (PlayerPrefs.GetInt("login_platform") == 2)
         {
+            /*
             // google play로 로그인 한 상태
-
+            PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
+            PlayGamesPlatform.InitializeInstance(config);
+            GooglePlayGames.PlayGamesPlatform.DebugLogEnabled = false;
+            PlayGamesPlatform.Activate();
+            */
         }
     }
 
@@ -200,7 +205,7 @@ public class Menu : MonoBehaviour {
         else if (PlayerPrefs.GetInt("login_platform") == 2)
         {
             // google play로 로그인 한 상태
-            PlayGamesPlatform.Instance.SignOut();
+            //PlayGamesPlatform.Instance.SignOut();
         }
         
         SceneManager.LoadScene("flogintest");

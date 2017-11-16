@@ -24,7 +24,7 @@ public class BreakableObject : MonoBehaviour {
     {
         if (collision.gameObject.tag.Contains("Player") && isBreakable)
         {
-            playEnvironment.IncreaseScore(9);
+            playEnvironment.IncreaseScore(9, 1);
             isBreakable = false;
             //gameObject.GetComponent<BoxCollider>().isTrigger = true;
             ObjectAni.SetBool("IsBreak", true);

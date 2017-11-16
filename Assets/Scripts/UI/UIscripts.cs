@@ -12,9 +12,9 @@ public class UIscripts : MonoBehaviour {
     public int TutorialCount;
     //=====튜토리얼 변수=======//
 
-    //=====스코어 변수=========//
-    public Text ScoreText;
-    public Animator ScoreAni;
+    //=====스코어, 업적 변수=========//
+    public Text ScoreText, AchivementText;
+    public Animator ScoreAni, AchiveAni;
     //=====스코어 변수=========//
 
     public SceneFader SceneFadeManager;
@@ -128,6 +128,13 @@ public class UIscripts : MonoBehaviour {
         //ScoreAni.SetBool("INC", true);
         ScoreAni.Play("IncreaseScore", 0, 0.0f);
         //ScoreAni.SetBool("INC", false);
+    }
+
+    public void AchivementActive(string t)
+    {
+        AchivementText.gameObject.SetActive(true);
+        AchivementText.text = t;
+        AchiveAni.Play("AchivementText", 0, 0.0f);
     }
     
 

@@ -20,7 +20,7 @@ public class Playenv : MonoBehaviour
     public Text MissionExplainText;
     public static int SpawnBoxCount;
     //public int MissionCount;//상자를 넣은 수.
-    public int MissionScore;
+    
     public int AmountMoney;//획득한 돈
     //public List<int> NowGetParts = new List<int>();
     public Dictionary<int, int> NowGetParts = new Dictionary<int, int>(); //<Key, value>
@@ -34,16 +34,21 @@ public class Playenv : MonoBehaviour
     // Use this for initialization
     GameObject AllNpc, AllItems, AllSpwanArea;
     GameObject DroneSpawn;
-    //=====컨텐츠 변수=========//
+    //=====컨텐츠 변수===============//
     //-----박스 퀘스트-------//
     public Vector3 BoxSpPoint;
     public Transform[] ReceiverNPCs = new Transform[8];
     Transform BoxReceiver;
-
     //-----박스 퀘스트-------//
 
 
-    //=====컨텐츠 변수=========//
+    //=====컨텐츠 변수===============//
+
+    //=====스코어, 업적 변수=========//
+    public int MissionScore;
+    public int[] Achivement = new int[10]; //[0]: ,[1]: 기물파손, [2]: 자동차 추돌
+
+    //=====스코어, 업적 변수=========//
 
     //=====튜토리얼 변수=======//
     public GameObject TutorialArrow;
@@ -252,6 +257,30 @@ public class Playenv : MonoBehaviour
     {
         UIManager.IncreaseScoreAni();
         MissionScore += amount;
+        if (MissionScore == 50)
+        {
+            UIManager.AchivementActive("50 스코어 달성\n당신 초보는 아니군요!");
+        }
+    }
+
+    public void IncreaseScore(int amount, int type)
+    {
+        UIManager.IncreaseScoreAni();
+        MissionScore += amount;
+        Achivement[type]++;
+        switch (type)
+        {
+            case 0: break;
+            case 1:
+                if(Achivement[type] == 10) UIManager.AchivementActive("도시 청소 1단계");
+                else if (Achivement[type] == 5) UIManager.AchivementActive("도시 청소 2단계");
+                break;
+            case 2:
+                if (Achivement[type] == 5) UIManager.AchivementActive("자동차 홈런 1단계");
+                else if (Achivement[type] == 2) UIManager.AchivementActive("자동차 홈런 2단계");
+                break;
+            case 3: break;
+        }
     }
 
     public void MoneyPlus(int getMoney)
