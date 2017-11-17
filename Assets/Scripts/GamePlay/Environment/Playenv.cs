@@ -224,9 +224,10 @@ public class Playenv : MonoBehaviour
                     {
                         getRate = 2;
                     }
-                    else {
+                    else if(MissionScore >= 100){
                         getRate = 1;
                     }
+                    else getRate = 0;
                     getExp = (int)(MissionScore * 0.1);
                     UIManager.MissionEnd(getRate, MissionScore, getExp, AmountMoney, NowGetParts); //점수,exp, money
                     MissionEnd(getRate, getExp, AmountMoney, NowGetParts);
@@ -272,14 +273,17 @@ public class Playenv : MonoBehaviour
         {
             case 0: break;
             case 1:
-                if(Achivement[type] == 10) UIManager.AchivementActive("도시 청소 1단계");
-                else if (Achivement[type] == 5) UIManager.AchivementActive("도시 청소 2단계");
+                if(Achivement[type] == 10) UIManager.AchivementActive("도시 청소 2단계\n오늘 스트레스가 많나요?");
+                else if (Achivement[type] == 5) UIManager.AchivementActive("도시 청소 1단계");
                 break;
             case 2:
-                if (Achivement[type] == 5) UIManager.AchivementActive("자동차 홈런 1단계");
-                else if (Achivement[type] == 2) UIManager.AchivementActive("자동차 홈런 2단계");
+                if (Achivement[type] == 5) UIManager.AchivementActive("교통 통제 2단계\n당신은 미쳤군요");
+                else if (Achivement[type] == 2) UIManager.AchivementActive("교통 통제 1단계");
                 break;
-            case 3: break;
+            case 3:
+                if (Achivement[type] == 3) UIManager.AchivementActive("물건 배달 2단계\n프로배달러");
+                else if (Achivement[type] == 1) UIManager.AchivementActive("물건 배달 1단계");
+                break;
         }
     }
 

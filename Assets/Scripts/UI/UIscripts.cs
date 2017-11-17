@@ -62,6 +62,8 @@ public class UIscripts : MonoBehaviour {
             fuel = Player.GetComponent<Drone>().Fuel;
             maxFuel = Player.GetComponent<Drone>().Max_Fuel;
             fuelBar.fillAmount = (float)fuel / (float)maxFuel;
+            if(fuel < 20) fuelBar.color = new Color32(255, 66, 66, 208);
+            else fuelBar.color = new Color32(255, 255, 169, 208);
             if (MissonEnd)//미션 종료시
             {
                 //Player.GetComponent<Rigidbody>().isKinematic = true;//드론 멈춤
