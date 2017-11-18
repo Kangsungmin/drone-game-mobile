@@ -54,4 +54,5 @@ public class MarkGenerator : MonoBehaviour {
         GameObject temp = Instantiate(BoxMark, new Vector3(0, 1248.5f, 0), Quaternion.identity);
         temp.GetComponent<MinimapMark>().target = Box;
     }
+    
 }

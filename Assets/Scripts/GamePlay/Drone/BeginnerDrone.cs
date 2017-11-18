@@ -9,8 +9,8 @@ public class BeginnerDrone : Drone
 
     void Awake()
     {
-        Max_Fuel = 50.0f;
-        Fuel = 50.0f;
+        Max_Fuel = 100.0f;
+        Fuel = 100.0f;
         Speed = 120;
         MaxThrust = 200.0f;
         thisRB = GetComponent<Rigidbody>();

@@ -5,11 +5,13 @@ using UnityEngine;
 //랜덤한 방향(y축 랜덤 회전)으로 DropItem 프리팹을 생성한다.
 
 public class DropItem : MonoBehaviour {
+    public int Drop_ID = 0;
     GameObject drop;
     // Use this for initialization
     private void Awake()
     {
         drop = Resources.Load("Prefabs/Items/DropableItem") as GameObject;
+        
     }
     public void GenerateItem()
     {
@@ -17,6 +19,7 @@ public class DropItem : MonoBehaviour {
         {
             transform.Rotate(Vector3.up * Random.Range(0, 360));
             GameObject instance = Instantiate(drop, transform.position, transform.rotation);
+            instance.transform.GetChild(0).GetChild(0).GetComponent<Fild_Item>().AwakeDrop(Drop_ID);
         }
     }
 }

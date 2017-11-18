@@ -292,6 +292,12 @@ public class Playenv : MonoBehaviour
         AmountMoney += getMoney;
         GameObject.Find("UI").SendMessage("PlayerNumCoinUpdate", AmountMoney.ToString());
     }
+    public void AddPart(int Part)
+    {
+        print(Part);
+        NowGetParts[Part] = NowGetParts[Part] + 1;
+    }
+
     public void AddParts(int[] PartIdList)
     {
         for (int i=0; i < PartIdList.Length; i++)
