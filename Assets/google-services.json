@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "339958114436",
+    "firebase_url": "https://mobiledronegame-86366954.firebaseio.com",
+    "project_id": "mobiledronegame-86366954",
+    "storage_bucket": "mobiledronegame-86366954.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339958114436:android:4d1db95dfbe02bc6",
+        "android_client_info": {
+          "package_name": "com.KAUSOFT.Drone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339958114436-ueuo43r5loaakv6535iibm734t7re2b8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA40p_S8pPn8iKlwsgu29QLLW5llumvCc4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339958114436-ueuo43r5loaakv6535iibm734t7re2b8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

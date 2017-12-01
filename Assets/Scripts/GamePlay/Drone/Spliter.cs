@@ -20,6 +20,7 @@ public class Spliter : Drone
     }
     void Start()
     {
+        /*
         playEnvironment = GameObject.Find("PlayEnvironment");
         UIManager = GameObject.Find("UI");
         moveJoystickLeft = UIManager.transform.Find("VirtualJoystickLeft").GetComponent<VirtualJS_Left>();
@@ -35,6 +36,7 @@ public class Spliter : Drone
         wingDir = new Vector3(270, 180, 0);
         bodyDir = Vector3.zero;
         int StageLevel = int.Parse(SceneData.SceneLevelName);
+        */
     }
     //=============================Update함수(프레임마다 호출) [시작]=============================
     void Update()
@@ -100,8 +102,6 @@ public class Spliter : Drone
 
     void FixedUpdate()//일정간격으로 호출한다.
     {
-        rotVec.x = Mathf.Cos(70 * -bodyDir.z);
-        rotVec.y = Mathf.Sin(70 * -bodyDir.z);
         if (DronePowerOn)
         {
             thisRB.AddForce(Vector3.up * Thrust); // Drone의 위(y축)으로 추력만큼 힘을 가한다.

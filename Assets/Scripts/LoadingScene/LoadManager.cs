@@ -9,6 +9,11 @@ public class LoadManager : MonoBehaviour
     bool LoadDialog = false;
     string Result_DB="";
 
+    private void Awake()
+    {
+        Screen.SetResolution(1280, 800, true);
+    }
+
     void Start()
     {
         StartCoroutine(Load_Data());
@@ -133,7 +138,7 @@ public class LoadManager : MonoBehaviour
             DroneModel model = new DroneModel(int.Parse(GetDataValue(user_Data, "DroneID:")),
                 GetDataValue(user_Data, "Name:"), int.Parse(GetDataValue(user_Data, "Price:")));
 
-            PlayerDataManager.Models.Add(model);
+            PlayerDataManager.Models.Add(model);//전체 드론목록 로드
         }
 
         // ---------------------------------------------------------------
@@ -152,6 +157,13 @@ public class LoadManager : MonoBehaviour
         {
             PlayerDataManager.ownParts[i] = int.Parse(items_num[i - 1]);
         }
+
+        //==================6~7파츠 구현시 삭제할 것.==================
+        PlayerDataManager.ownParts[6] = 1;
+        PlayerDataManager.ownParts[7] = 0;
+        PlayerDataManager.ownParts[8] = 0;
+        PlayerDataManager.ownParts[9] = 0;
+        //==================6~7파츠 구현시 삭제할 것.==================
 
         // ------------------------------------------------------------------
 

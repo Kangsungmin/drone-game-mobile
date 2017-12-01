@@ -14,6 +14,7 @@ public class Redwing : Drone
     }
     void Start()
     {
+        /*
         playEnvironment = GameObject.Find("PlayEnvironment");
         InventoryManager = GameObject.Find("Inventory");
         UIManager = GameObject.Find("UI");
@@ -28,6 +29,7 @@ public class Redwing : Drone
         wingDir = new Vector3(270, 180, 0);
         bodyDir = Vector3.zero;
         int StageLevel = int.Parse(SceneData.SceneLevelName);
+        */
     }
     /*
     bool getbooltime() { return this.bool_time; }
@@ -112,8 +114,6 @@ public class Redwing : Drone
 
     void FixedUpdate()//일정간격으로 호출한다.
     {
-        rotVec.x = Mathf.Cos(70 * -bodyDir.z);
-        rotVec.y = Mathf.Sin(70 * -bodyDir.z);
 
         if (DronePowerOn)
         {

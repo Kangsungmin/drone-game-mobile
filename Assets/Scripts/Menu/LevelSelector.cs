@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelSelector : MonoBehaviour {
-    //static SceneData sceneData = new SceneData();
     public SceneFader fader;
     public Text SpannerView;
 

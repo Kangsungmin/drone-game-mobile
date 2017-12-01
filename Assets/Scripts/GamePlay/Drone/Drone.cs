@@ -22,14 +22,17 @@ public abstract class Drone : MonoBehaviour {
     public float Thrust = 0.000f, hovering_Thrust = 48.031f, MaxThrust = 100.0f;
     public Vector3 wingDir;
     public Vector3 bodyDir;
-    public Vector3 rotVec;
+    protected Vector3 Forward, Right;
+    protected float F_Force, R_Force;
 
-    public GameObject playEnvironment, InventoryManager, UIManager;
+
+    public GameObject playEnvironment, InventoryManager;
+    public UIManager ui_Manager;
     protected Rigidbody thisRB;
 
     protected VirtualJS_Left moveJoystickLeft;//조이스틱 객체
     protected VirtualJS_Right moveJoystickRight;
-    protected Transform Claw;
+    public Transform Claw;
     
 
     //=================================================

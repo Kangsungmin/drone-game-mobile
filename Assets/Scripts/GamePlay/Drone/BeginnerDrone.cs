@@ -5,7 +5,7 @@ using UnityEngine;
 public class BeginnerDrone : Drone
 {
     public ParticleSystem grabEffect, GoalInEffect, ElecEffect;
-    float endX, endY ,endZ;
+    float endX, endY, endZ;
 
     void Awake()
     {
@@ -14,9 +14,33 @@ public class BeginnerDrone : Drone
         Speed = 120;
         MaxThrust = 200.0f;
         thisRB = GetComponent<Rigidbody>();
+        GoalInEffect.Stop();
+        grabEffect.Stop();
+        ElecEffect.Stop();
+        AnimatorState = true;//드론 에니메이션 상태
+        bodyDir = Vector3.zero;
+        int StageLevel;
+        if (SceneData.SceneLevelName != null) StageLevel = int.Parse(SceneData.SceneLevelName);
+        else StageLevel = 1;
+
+    }
+    public void SetReference(GameObject[] Ref)
+    {
+        playEnvironment = Ref[0];//Environment
+        ui_Manager = Ref[1].GetComponent<UIManager>();
+        moveJoystickLeft = Ref[2].GetComponent<VirtualJS_Left>();
+        moveJoystickRight = Ref[3].GetComponent<VirtualJS_Right>();
+        //파티클은 수동 할당요함.
+        //드론의 하위 스크립트에도 레퍼런스 할당
+        GameObject[] tempRef = new GameObject[3];
+        tempRef[0] = ui_Manager.LiftButton.gameObject;
+        tempRef[1] = ui_Manager.LiftButtonAni;
+        tempRef[2] = ui_Manager.GaugeUI;
+        Claw.SendMessage("SetReference", tempRef);
     }
     void Start()
     {
+        /*
         playEnvironment = GameObject.Find("PlayEnvironment");
         UIManager = GameObject.Find("UI");
         moveJoystickLeft = UIManager.transform.Find("VirtualJoystickLeft").GetComponent<VirtualJS_Left>();
@@ -32,15 +56,12 @@ public class BeginnerDrone : Drone
         wingDir = new Vector3(270, 180, 0);
         bodyDir = Vector3.zero;
         int StageLevel = int.Parse(SceneData.SceneLevelName);
+        */
     }
     //=============================Update함수(프레임마다 호출) [시작]=============================
     void Update()
     {
         bodyDir = Vector3.zero;
-
-        //float amtMove = Speed * Time.smoothDeltaTime;//프레임당 이동 거리
-        //float amtRot = RotSpeed * Time.smoothDeltaTime;//드론 z축기준 회전 속도
-        float keyUp = Input.GetAxis("Up");
         //=============================드론 에니메이션[시작]=============================
         Animations();
         //=============================드론 에니메이션[끝]===============================
@@ -65,37 +86,29 @@ public class BeginnerDrone : Drone
         if (DronePowerOn)//드론 작동 가능 시,
         {
             currentY = transform.eulerAngles.y;
-            currentY += moveJoystickLeft.Horizontal() * 2;//left조이스틱 회전 누적
             bodyDir.z = -50.0f * moveJoystickLeft.Horizontal();//몸체 좌우 회전
+            bodyDir.x = 30.0f * moveJoystickLeft.Vertical();
             bodyDir.y = currentY;
+            bodyDir.y += 3.0f * moveJoystickRight.Horizontal();
+            transform.eulerAngles = bodyDir;//Drone 오브젝트 좌우 회전 적용
+
+            if (flyDelay) StartCoroutine("AddCtrlToDrone", moveJoystickRight.Vertical()); //상하강 버튼을 누를시
+            if (moveJoystickLeft.Horizontal() + moveJoystickLeft.Vertical() + moveJoystickRight.Vertical() != 0.0f) AnimatorState = false;
+            else AnimatorState = true;
+
+
+
 
             transform.eulerAngles = bodyDir;//Drone 오브젝트 좌우 회전 적용
-            //if ((moveJoystickLeft.Vertical() != 0.0f) || (moveJoystickRight.Vertical() != 0.0f)) ; //Arming.AttackMode = false;
+                                            //if ((moveJoystickLeft.Vertical() != 0.0f) || (moveJoystickRight.Vertical() != 0.0f)) ; //Arming.AttackMode = false;
+                                            //좌측 조이스틱에 따른 날개 회전 애니메이션은 DroneAnim스크립트에서 처리한다.
 
-            //좌측 조이스틱에 따른 날개 회전 애니메이션은 DroneAnim스크립트에서 처리한다.
-            if (flyDelay) StartCoroutine("AddCtrlToDrone", moveJoystickRight.Vertical()); //상하강 버튼을 누를시
 
 
             //애니메이션
-            if (moveJoystickLeft.Horizontal() + moveJoystickLeft.Vertical() + moveJoystickRight.Vertical() != 0.0f) AnimatorState = false;
-            else AnimatorState = true;
+
         }
         //=============================드론 조작[끝]===============================
-
-
-        //============================이동구간[시작]===================================
-        if (Vector3.Distance(transform.position, Vector3.zero) < 242.0f)
-        {
-            endX = transform.position.x;
-            endY = transform.position.y;
-            endZ = transform.position.z;
-        }
-        else if (Vector3.Distance(transform.position, Vector3.zero) > 245.0f)
-        {
-            Vector3 setPos = new Vector3(endX - 1, endY - 1, endZ - 1);
-            transform.position = setPos;
-        }
-        //============================이동구간[끝]=====================================
     }
     //=============================Update함수(프레임마다 호출) [끝]===============================
 
@@ -103,16 +116,25 @@ public class BeginnerDrone : Drone
 
     void FixedUpdate()//일정간격으로 호출한다.
     {
-        rotVec.x = Mathf.Cos(70 * -bodyDir.z);
-        rotVec.y = Mathf.Sin(70 * -bodyDir.z);
+        float sinz = Mathf.Sin(bodyDir.z * Mathf.Deg2Rad);
+        sinz = Mathf.Abs(sinz);
+        float sinx = Mathf.Sin(bodyDir.x * Mathf.Deg2Rad);
+        sinx = Mathf.Abs(sinx);
 
         if (DronePowerOn)
         {
-            thisRB.AddForce(Vector3.up * Thrust); // Drone의 위(y축)으로 추력만큼 힘을 가한다.
-            thisRB.AddRelativeForce(Vector3.forward * Speed * moveJoystickLeft.Vertical());
+            F_Force = Speed * moveJoystickLeft.Vertical();
+            R_Force = Speed * moveJoystickLeft.Horizontal();
+            Forward = Vector3.forward * F_Force;
+            Right = Vector3.right * R_Force;
+            thisRB.AddRelativeForce(Forward);
+            thisRB.AddRelativeForce(Right);
+            Vector3 ExtraT = new Vector3(0.0f, Mathf.Abs(F_Force) * sinx + Mathf.Abs(R_Force) * sinz, 0.0f);
+
+            thisRB.AddForce(Vector3.up * Thrust + ExtraT); // world의 위(y축)으로 추력만큼 힘을 가한다.
             if (fuelDelay) StartCoroutine("fuelControl");
         }
-        
+
     }
 
     void Animations()
@@ -129,15 +151,16 @@ public class BeginnerDrone : Drone
     IEnumerator AddCtrlToDrone(float Up)
     {
         flyDelay = false;
-        if (DronePowerOn == false && Up > 0) { Thrust = 40; DronePowerOn = true; }//드론 첫 동작시 초기 모터속도 1650
+        if (DronePowerOn == false && Up > 0.0f) { Thrust = 40; DronePowerOn = true; }//드론 첫 동작시 초기 모터속도 1650
 
-        if (Thrust > MaxThrust && Up > 0) {;}
+        if (Thrust > MaxThrust && Up > 0) {; }
         else if (DronePowerOn && Up == 0.0f) { Thrust = hovering_Thrust; }
         else//드론에 추력을 가할 때,
         {
-            if (Thrust >= 0)
+            if (Thrust >= 0.0f)
             {
-                Thrust += 20 * Up;
+                if (Up < 0.0f) Thrust = 30 * Up;
+                else Thrust += 20 * Up;
             }
             else
             {
@@ -149,8 +172,7 @@ public class BeginnerDrone : Drone
         flyDelay = true;
     }
     //=============================드론 추력 조작[끝]===============================
-
-
+    
     void OnTriggerEnter(Collider col)
     {
         if (col.tag == "charger")
@@ -164,8 +186,7 @@ public class BeginnerDrone : Drone
         }
 
     }
-
-
+    
     //=============================드론 충돌 판정[시작]=============================
     void OnCollisionEnter(Collision collision)//오브젝트와 충돌시 호출.
     {
@@ -194,15 +215,15 @@ public class BeginnerDrone : Drone
             }
             else if (thisRB.velocity.magnitude > 2.5f)
             {
-                //Hit((int)(v * 0.5f));
-            }
-            else
-            {
-                //약한충돌로 무시한다.
+                playEnvironment.GetComponent<Environment>().IncreaseScore(1, 0);
             }
         }
     }
     //=============================드론 충돌 판정[끝]===============================
+
+    
+
+
 
     //=============================드론 연료함수[시작]=============================
     IEnumerator fuelControl()//연료 감소 메소드
@@ -213,10 +234,16 @@ public class BeginnerDrone : Drone
             DronePowerOn = false;
             DroneAnimator.enabled = false;
             GameOver = true;
+            /*
             Playenv.GameOver = true;
             playEnvironment.GetComponent<Playenv>().GameEnd();//게임종료시킴
+            */
+            Environment.GameOver = true;
+            playEnvironment.GetComponent<Environment>().GameEnd();
+
+
         }
-        else if (Thrust > 20 && DronePowerOn) Fuel -= 1.0f;       //연료가 남아있을 때 감소시킨다.
+        else if (Thrust > 20 && DronePowerOn) Fuel -= 1.0f;//연료가 남아있을 때 감소시킨다.
 
         yield return new WaitForSeconds(1.0f);//해당 메소드에 1초 지연을 시킨다.
         fuelDelay = true;
@@ -241,6 +268,12 @@ public class BeginnerDrone : Drone
     }
     //=============================연료 충전함수[끝]===============================
 
+    public void SpawnItem(string ItemName)
+    {
+        GameObject Item = Resources.Load("Prefabs/Items/"+ ItemName) as GameObject;
+        Item = Instantiate(Item, Claw.transform.position, Claw.transform.rotation);
+    }
+
 
     public override void GrabSomthing(GameObject targetObject)//물건을 집는 메소드
     {
@@ -260,7 +293,7 @@ public class BeginnerDrone : Drone
         GetComponent<Rigidbody>().mass += targetObject.GetComponent<Rigidbody>().mass;//드론의 무게를 증가시킨다.
         //파티클 실행
         GrabParticlePlay();
-        
+
     }
     public override void DropSomthing()
     {
@@ -273,8 +306,8 @@ public class BeginnerDrone : Drone
             transform.GetChild(7).GetComponent<Rigidbody>().isKinematic = false;
             transform.GetChild(7).parent = null;//물건 부모해제
         }
-        Claw.GetComponent<BoxCollider>().size = new Vector3(0, 0, 0);
-        Claw.transform.localPosition = new Vector3(0, 0, 0);
+        //Claw.GetComponent<BoxCollider>().size = new Vector3(0, 0, 0);
+        //Claw.transform.localPosition = new Vector3(0, 0, 0);
     }
 
 

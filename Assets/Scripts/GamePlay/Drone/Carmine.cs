@@ -6,6 +6,7 @@ using System.Timers;
 
 public class Carmine : Drone
 {
+    
     public ParticleSystem grabEffect, GoalInEffect;
     float endX, endZ;
 
@@ -19,9 +20,10 @@ public class Carmine : Drone
     }
     void Start()
     {
+        /*
         playEnvironment = GameObject.Find("PlayEnvironment");
         InventoryManager = GameObject.Find("Inventory");
-        UIManager = GameObject.Find("UI");
+        ui_Manager = GameObject.Find("UI");
         moveJoystickLeft = UIManager.transform.Find("VirtualJoystickLeft").GetComponent<VirtualJS_Left>();
         moveJoystickRight = UIManager.transform.Find("VirtualJoystickRight").GetComponent<VirtualJS_Right>();
         Claw = transform.Find("Claw");
@@ -33,6 +35,7 @@ public class Carmine : Drone
         wingDir = new Vector3(270, 180, 0);
         bodyDir = Vector3.zero;
         int StageLevel = int.Parse(SceneData.SceneLevelName);
+        */
     }
     /*
     bool getbooltime() { return this.bool_time; }
@@ -114,8 +117,6 @@ public class Carmine : Drone
 
     void FixedUpdate()//일정간격으로 호출한다.
     {
-        rotVec.x = Mathf.Cos(70 * -bodyDir.z);
-        rotVec.y = Mathf.Sin(70 * -bodyDir.z);
 
         if (DronePowerOn)
         {
@@ -350,4 +351,5 @@ public class Carmine : Drone
         }
         else return val;
     }
+    
 }

@@ -7,6 +7,7 @@ public class Part{
     private string Title;
     private int BuyPrice;
     private int SellPrice;
+    public int[] Recipe = new int[8] {0,0,0,0,0,0,0,0};
 
     public Part(int id, string title, int buyPrice, int sellPrice)
     {
@@ -44,6 +45,38 @@ public class Part{
                 this.Title = "Silver";
                 this.BuyPrice = 2000;
                 this.SellPrice = 1600;
+                break;
+            case 6://Plastic(100)
+                this.Title = "Propeller";
+                this.BuyPrice = -1;
+                this.SellPrice = -1;
+                Recipe[2] = 100;
+                break;
+            case 7://Al(10)+Iron(50)+Plastic(30)
+                this.Title = "Motor";
+                this.BuyPrice = -1;
+                this.SellPrice = -1;
+                Recipe[4] = 10;
+                Recipe[3] = 50;
+                Recipe[2] = 30;
+                break;
+            case 8://Plastic(250)+Al(20)+Silver(1)+Paper(30)
+                this.Title = "Frame";
+                this.BuyPrice = -1;
+                this.SellPrice = -1;
+                Recipe[5] = 1;
+                Recipe[4] = 20;
+                Recipe[2] = 250;
+                Recipe[1] = 30;
+                break;
+            case 9://Al(30) + Iron(100) + Plastic(20) + Paper(50)
+                this.Title = "Mainboard";
+                this.BuyPrice = -1;
+                this.SellPrice = -1;
+                Recipe[4] = 30;
+                Recipe[3] = 100;
+                Recipe[2] = 20;
+                Recipe[1] = 50;
                 break;
         }
     }

@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public class ShopManager : MonoBehaviour {
     SceneFader Fader;
     GameObject ViewCamera, LeftButton, RightButton, BuyPanel, UsingInfo;
-    public GameObject PlayerDataView, UpgradeButton, ChangeButton, ComingSoonPanel;
+    public GameObject PlayerDataView, UpgradeButton, ChangeButton, MakePanel, ComingSoonPanel;
     GameObject[] AllModels;
     Text MoneyView, ModelPriceView;
-    public Text partsView1, partsView2, partsView3, partsView4;
-    int nowPoint;
+    public Text partsView1, partsView2, partsView3, partsView4, partsView5, partsView6, partsView7, partsView8, partsView9;
+    public Text RecipeView, NowDroneRecipeView, RequireTimeView;
+    int nowPoint, nowMakingID;
     bool isMoving, isBuying;
 
 	DroneModel thismodel;
@@ -23,7 +24,7 @@ public class ShopManager : MonoBehaviour {
         LeftButton = GameObject.Find("LeftBtn");
         RightButton = GameObject.Find("RightBtn");
         BuyPanel = GameObject.Find("BuyPanel");
-        UsingInfo = GameObject.Find("Using");
+        UsingInfo = GameObject.Find("UsingText");
         nowPoint = 0;
         MoneyView = GameObject.Find("MoneyAmount").GetComponent<Text>();
         ModelPriceView = GameObject.Find("ModelPrice").GetComponent<Text>();
@@ -43,8 +44,15 @@ public class ShopManager : MonoBehaviour {
         partsView3.text = PlayerDataManager.ownParts[3].ToString();
         partsView4.text = PlayerDataManager.ownParts[4].ToString();
 
+        partsView6.text = PlayerDataManager.ownParts[6].ToString();
+        partsView7.text = PlayerDataManager.ownParts[7].ToString();
+        partsView8.text = PlayerDataManager.ownParts[8].ToString();
+        partsView9.text = PlayerDataManager.ownParts[9].ToString();
+
         thismodel = PlayerDataManager.Models[nowPoint];
-        updateModelInfo(thismodel);
+        updateModelInfo(thismodel);//가격, 정보 업데이트
+        RecipeDroneUpdate();
+
 
         if (CheckModelIs(thismodel))
         {
@@ -92,11 +100,7 @@ public class ShopManager : MonoBehaviour {
 			yield return data;
 
 			string user_Data = data.text;
-
-			
 				//사는작업 성공 후 DB에 Update 성공한 상태.
-
-
 				// ======= 현재 추가해야할 드론정보를 DB에서 가져와 내 소유모델에 추가 =========
 
 				form.AddField("droneIDPost", thismodel.getID());
@@ -110,7 +114,6 @@ public class ShopManager : MonoBehaviour {
 					GetDataValue(user_Data, "Name:"), int.Parse(GetDataValue(user_Data, "Price:")));
 
 				PlayerDataManager.ownModels.Add(model);
-
             // =============================================================================
 
         }
@@ -143,7 +146,6 @@ public class ShopManager : MonoBehaviour {
 
     public void ThisModelBuy()//현재 모델 구매
     {
-        
             thismodel = PlayerDataManager.Models[nowPoint];
 
             if (PlayerDataManager.money - thismodel.getPrice() >= 0)
@@ -158,8 +160,6 @@ public class ShopManager : MonoBehaviour {
             else {
                 Debug.Log("No money....");
             }
-            
-      
     }
 
     public void LeftShift()//좌로 이동
@@ -177,10 +177,8 @@ public class ShopManager : MonoBehaviour {
                 LeftButton.SetActive(false);
             
 			ViewCamera.SendMessage("ShiftLeft");
-
             StartCoroutine("MovigLock");
         }
-
     }
 
     public void RightShift()//우로 이동
@@ -230,7 +228,6 @@ public class ShopManager : MonoBehaviour {
 
     public void Sell_Part(int itemID)
     {
-        
             Part p = new Part(itemID);
 
             if (PlayerDataManager.ownParts[itemID] - 1 >= 0)
@@ -255,9 +252,7 @@ public class ShopManager : MonoBehaviour {
     }
     public void Buy_Part(int itemID)
     {
-        
             Part p = new Part(itemID);
-
             if (PlayerDataManager.money - p.getBuyPrice() >= 0)
             {
                 if (!isBuying)
@@ -266,16 +261,58 @@ public class ShopManager : MonoBehaviour {
                     PlayerDataManager.money -= p.getBuyPrice();
                     PlayerDataManager.ownParts[itemID]++;
                     StartCoroutine(Sell_Part_DB(itemID, PlayerDataManager.ownParts[itemID]));
-
                 }
             }
             else
             {
                 Debug.Log("No money....");
             }
+    }
+
+    public void Make_Drone(int thisModel)//드론에 필요한 부품만큼 차감하고 새로운 드론 제공
+    {
 
     }
-    
+
+    public void RecipeDroneUpdate()
+    {
+        string temp = "";
+        for (int i = 0; i < thismodel.Recipe.Count; i++)
+        {
+            temp += thismodel.Recipe[i].First.getTitle() + ", " + thismodel.Recipe[i].Second;
+        }
+        NowDroneRecipeView.text = temp;
+    }
+
+    public void Make_PanelOn(int itemID)
+    {
+        nowMakingID = itemID;
+        MakePanel.SetActive(true);
+        Part p = new Part(itemID);
+        string tempRecipe = p.getTitle() + " = ";
+        for (int i=0; i<p.Recipe.Length; i++)
+        {
+            if (p.Recipe[i] != 0)
+            {
+                tempRecipe += new Part(i).getTitle();
+                tempRecipe += "(" + PlayerDataManager.ownParts[i] + "/" + p.Recipe[i].ToString() + ") ,";
+            }
+        }
+        RecipeView.text = tempRecipe;
+    }
+
+    public void MakePart()//부품제작. 필요한 재료만큼 차감한다.
+    {
+        //<<nowMakingID>>
+
+    }
+
+    public void Make_PanelOff()
+    {
+        MakePanel.SetActive(false);
+    }
+
+
     IEnumerator Sell_Part_DB(int itemID, int itemNum)
     {
         WWWForm form = new WWWForm();

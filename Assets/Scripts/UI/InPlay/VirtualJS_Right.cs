@@ -25,14 +25,14 @@ public class VirtualJS_Right : MonoBehaviour, IDragHandler, IPointerUpHandler, I
 
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(bgImg.rectTransform, ped.position, ped.pressEventCamera, out pos))
         {
-            //pos.x = (pos.x / bgImg.rectTransform.sizeDelta.x);
+            pos.x = (pos.x / bgImg.rectTransform.sizeDelta.x);//
             pos.y = (pos.y / bgImg.rectTransform.sizeDelta.y);
 
-            //float x = (bgImg.rectTransform.pivot.x == 1) ? pos.x * 2 + 1 : pos.x * 2 - 1;
+            float x = (bgImg.rectTransform.pivot.x == 1) ? pos.x * 2 + 1 : pos.x * 2 - 1;//
             float y = (bgImg.rectTransform.pivot.y == 1) ? pos.y * 2 + 1 : pos.y * 2 - 1;
 
-            //inputVector = new Vector3(x, 0, y);
-            inputVector = new Vector3(0, 0, y);
+            inputVector = new Vector3(x, 0, y);//
+            //inputVector = new Vector3(0, 0, y);
             inputVector = (inputVector.magnitude > 1) ? inputVector.normalized : inputVector;//1보다 클 경우 처리
 
             joystickImg.rectTransform.anchoredPosition = new Vector3(inputVector.x * (bgImg.rectTransform.sizeDelta.x / 3), inputVector.z *

@@ -45,6 +45,7 @@ public class Playenv : MonoBehaviour
     //=====컨텐츠 변수===============//
 
     //=====스코어, 업적 변수=========//
+    public const int GETCOIN = 0, OBJ_DESTROY = 1, CAR_CRASH = 2, DELIVERY = 3, PROTECT_EARTH = 4, AIR_CRASH = 5, MOCK_KID = 6;
     public int MissionScore;
     public int[] Achivement = new int[10]; //[0]: ,[1]: 기물파손, [2]: 자동차 추돌
 
@@ -271,18 +272,31 @@ public class Playenv : MonoBehaviour
         Achivement[type]++;
         switch (type)
         {
-            case 0: break;
-            case 1:
-                if(Achivement[type] == 10) UIManager.AchivementActive("도시 청소 2단계\n오늘 스트레스가 많나요?");
+            case GETCOIN:
+                break;
+            case OBJ_DESTROY:
+                if(Achivement[type] == 10) UIManager.AchivementActive("도시 청소 2단계: 도시의 청소부");
                 else if (Achivement[type] == 5) UIManager.AchivementActive("도시 청소 1단계");
                 break;
-            case 2:
-                if (Achivement[type] == 5) UIManager.AchivementActive("교통 통제 2단계\n당신은 미쳤군요");
-                else if (Achivement[type] == 2) UIManager.AchivementActive("교통 통제 1단계");
+            case CAR_CRASH:
+                if (Achivement[type] == 3) UIManager.AchivementActive("교통 통제 2단계\n당신은 미쳤군요");
+                else if (Achivement[type] == 1) UIManager.AchivementActive("교통 통제 1단계");
                 break;
-            case 3:
-                if (Achivement[type] == 3) UIManager.AchivementActive("물건 배달 2단계\n프로배달러");
+            case DELIVERY:
+                if (Achivement[type] == 3) UIManager.AchivementActive("물건 배달 2단계: 프로배달러");
                 else if (Achivement[type] == 1) UIManager.AchivementActive("물건 배달 1단계");
+                break;
+            case PROTECT_EARTH:
+                if (Achivement[type] == 3) UIManager.AchivementActive("지구 지키기 2단계");
+                else if (Achivement[type] == 1) UIManager.AchivementActive("지구 지키기 1단계");
+                break;
+            case AIR_CRASH:
+                if (Achivement[type] == 3) UIManager.AchivementActive("놀라운 비행 실력 2단계");
+                else if (Achivement[type] == 1) UIManager.AchivementActive("놀라운 비행 실력 1단계");
+                break;
+            case MOCK_KID:
+                if (Achivement[type] == 5) UIManager.AchivementActive("동심파괴 2단계");
+                else if (Achivement[type] == 1) UIManager.AchivementActive("동심파괴 1단계");
                 break;
         }
     }

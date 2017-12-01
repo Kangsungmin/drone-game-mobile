@@ -16,7 +16,7 @@ public class PlayerDataManager : MonoBehaviour
 	public static int money { get; set; }
 	public static int level { get; set; }
 	public static int exp { get; set; }
-	public static List<DroneModel> Models = new List<DroneModel>();
+	public static List<DroneModel> Models = new List<DroneModel>();//모든 모델 정보 저장
 	public static List<DroneModel> ownModels = new List<DroneModel>();
     public static Dictionary<int, int> ownParts = new Dictionary<int, int>(); //<Key, value>
     public static DroneModel nowUsingModel;

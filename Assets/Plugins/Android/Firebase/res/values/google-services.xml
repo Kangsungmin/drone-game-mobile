@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="firebase_database_url" translatable="false">https://mobiledronegame-86366954.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">339958114436</string>
+  <string name="google_storage_bucket" translatable="false">mobiledronegame-86366954.appspot.com</string>
+  <string name="project_id" translatable="false">mobiledronegame-86366954</string>
+  <string name="google_api_key" translatable="false">AIzaSyA40p_S8pPn8iKlwsgu29QLLW5llumvCc4</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyA40p_S8pPn8iKlwsgu29QLLW5llumvCc4</string>
+  <string name="google_app_id" translatable="false">1:339958114436:android:4d1db95dfbe02bc6</string>
+  <string name="default_web_client_id" translatable="false">339958114436-ueuo43r5loaakv6535iibm734t7re2b8.apps.googleusercontent.com</string>
+</resources>

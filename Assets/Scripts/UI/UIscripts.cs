@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 public class UIscripts : MonoBehaviour {
     GameObject Player;
-    Playenv PlayEnvironment;
+    public Environment PlayEnvironment;
     //=====튜토리얼 변수=======//
     public GameObject TutorialPanel, TutorialButton;
     public int TutorialCount;
@@ -38,10 +38,15 @@ public class UIscripts : MonoBehaviour {
     {
         MissonEnd = false;
     }
+
+    public void SetRef(GameObject[] Refs)
+    {
+        Player = Refs[0];
+    }
+
     void Start ()
     {
-		Player = GameObject.FindGameObjectWithTag ("Player");
-        PlayEnvironment = GameObject.Find("PlayEnvironment").GetComponent<Playenv>();
+		//Player = GameObject.FindGameObjectWithTag ("Player");
         //healthBar = transform.Find("HP").Find("HP_bar").GetComponent<Image>();
         
         //현재 튜토리얼이면 튜토리얼 패널 활성화

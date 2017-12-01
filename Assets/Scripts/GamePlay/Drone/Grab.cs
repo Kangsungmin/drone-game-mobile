@@ -1,21 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Grab : MonoBehaviour
 {
     float Range = 4.5f;
-    GameObject gaugueUI;
-    GameObject GrabButtonAni, GrabButton;
+    public GameObject GrabButtonAni, GrabButton, GaugueUI;
     GameObject target;
     GameObject[] Boxestemp;
     List<GameObject> Boxes = new List<GameObject>();
-    // Use this for initialization
+    
+    public void SetReference(GameObject[] Refs)
+    {
+        GrabButton = Refs[0];
+        GrabButtonAni = Refs[1];
+        GaugueUI = Refs[2];
+    }
+
     void Start()
     {
+        /*
         GrabButtonAni = GameObject.Find("UI").transform.Find("GrabButtonParent").gameObject;
         GrabButton = GameObject.Find("UI").transform.Find("GrabButton").gameObject;
-        gaugueUI = GameObject.Find("UI").transform.Find("GaugePanel").gameObject;
+        GaugueUI = GameObject.Find("UI").transform.Find("GaugePanel").gameObject;
+        */
     }
 
     // Update is called once per frame
@@ -40,13 +49,13 @@ public class Grab : MonoBehaviour
                 target = null;
                 GrabButtonAni.SetActive(false);
                 GrabButton.SetActive(false);
-                gaugueUI.SetActive(false);
+                GaugueUI.SetActive(false);
             } //버튼 비활성화
         }
         else
         {
             //게이지 UI가 있다면 해제
-            gaugueUI.SetActive(false);
+            GaugueUI.SetActive(false);
         }
     }
     public void AddBoxList(GameObject box)

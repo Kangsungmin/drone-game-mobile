@@ -56,12 +56,12 @@ public class VirtualJS_Left : MonoBehaviour, IDragHandler, IPointerUpHandler, IP
     public float Horizontal()
     {
         if (inputVector.x != 0) return inputVector.x;
-        else return Input.GetAxis("Horizontal");
+        else return Input.GetAxis("Right");
     }
 
     public float Vertical()
     {
         if (inputVector.z != 0) return inputVector.z;
-        else return Input.GetAxis("Vertical");
+        else return Input.GetAxis("Forward");
     }
 }

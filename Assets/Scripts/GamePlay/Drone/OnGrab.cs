@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+//리프트 버튼에 삽입된 스크립트
 public class OnGrab : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public static string grabState;//Idle, Using
@@ -11,15 +11,19 @@ public class OnGrab : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     Animator GrabModeCtrl;//UI애니메이션
     public GameObject GaugeUI;
 	// Use this for initialization
+
+    public void SetReference(GameObject[] Refs)
+    {
+        Drone = Refs[0];
+        DroneClaw = Refs[1];
+        GrabModeCtrl = Refs[2].GetComponent<Animator>();
+    }
+
 	void Start () {
         grabState = "Idle";
-        Drone = GameObject.FindGameObjectWithTag("Player");
-        DroneClaw = GameObject.FindGameObjectWithTag("Player").transform.Find("Claw").gameObject;
-        GrabModeCtrl = GameObject.Find("UI").transform.Find("GrabButtonParent").GetComponent<Animator>();
         GaugeUI.SetActive(false);
-
     }
-    
+
     public void OnPointerDown(PointerEventData eventData)//버튼 눌린상태
     {
         //게이지 활성화
@@ -32,8 +36,8 @@ public class OnGrab : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 Drone.SendMessage("DropSomthing");
                 break;
         }
-        
     }
+
     public void OnPointerUp(PointerEventData eventData)
     {
         //현재의 gauge 포지션 받아옴

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using Facebook.Unity;
+//using Facebook.Unity;
 using UnityEngine.SceneManagement;
-//using GooglePlayGames;
-//using GooglePlayGames.BasicApi;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 
 public class Menu : MonoBehaviour {
     public GameObject LevelMenu;
@@ -19,20 +19,21 @@ public class Menu : MonoBehaviour {
 
     void Awake()
     {
+        Screen.SetResolution(1280, 800, true);
         if (PlayerPrefs.GetInt("login_platform") == 1)
         {
             // facebok으로 로그인 한 상태
-            FB.Init();
+            //FB.Init();
         }
         else if (PlayerPrefs.GetInt("login_platform") == 2)
         {
-            /*
+            
             // google play로 로그인 한 상태
             PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
             PlayGamesPlatform.InitializeInstance(config);
             GooglePlayGames.PlayGamesPlatform.DebugLogEnabled = false;
             PlayGamesPlatform.Activate();
-            */
+            
         }
     }
 
@@ -52,7 +53,7 @@ public class Menu : MonoBehaviour {
 
         //AudioSource.PlayClipAtPoint(backMusic,transform.position);
         //화면 사이즈 적용
-        Screen.SetResolution(1280, 800, true);
+        
         Time.timeScale = 1;
         //Path.text = Application.dataPath;
         // Debug.Log("플레이어 레벨 : " + PlayerDataManager.level);
@@ -195,20 +196,8 @@ public class Menu : MonoBehaviour {
     public void Logout()
     {
 
-        PlayerPrefs.DeleteAll();
-
-        if (PlayerPrefs.GetInt("login_platform") == 1)
-        {
-            // facebook으로 로그인 한 상태
-            FB.LogOut();
-        }
-        else if (PlayerPrefs.GetInt("login_platform") == 2)
-        {
-            // google play로 로그인 한 상태
-            //PlayGamesPlatform.Instance.SignOut();
-        }
-        
-        SceneManager.LoadScene("flogintest");
+        googleexample ge = new googleexample();
+        ge.LogOut();
     }
 
 }

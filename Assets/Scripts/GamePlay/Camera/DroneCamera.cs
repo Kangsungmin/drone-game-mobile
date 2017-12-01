@@ -18,6 +18,7 @@ public class DroneCamera : MonoBehaviour
     public VirtualJS_Left moveJoystickLeft;//조이스틱 객체
     bool locked;
     // Use this for initialization
+
     void Start()
     {
         locked = false;
@@ -46,6 +47,10 @@ public class DroneCamera : MonoBehaviour
         camTransform.LookAt(CamlookPos);//보는 방향
     }
     
+    public void SetLookAt(Transform target)
+    {
+        lookAt = target;
+    }
     
 
 }

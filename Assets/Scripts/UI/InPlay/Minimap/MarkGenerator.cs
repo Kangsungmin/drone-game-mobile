@@ -18,10 +18,11 @@ public class MarkGenerator : MonoBehaviour {
         //현재 스테이지 받아옴. 스테이지에 따른 해당 NPC만 미니맵에 출력
         int StageLevel = int.Parse(SceneData.SceneLevelName);
         //
-        Npcs = GameObject.FindGameObjectsWithTag("NPC_R" + StageLevel);//NPC_Rn테그를 가진 게임오브젝트 배열을 리턴
+        //Npcs = GameObject.FindGameObjectsWithTag("NPC_R" + StageLevel);//NPC_Rn테그를 가진 게임오브젝트 배열을 리턴
         Boxes = GameObject.FindGameObjectsWithTag("Box");
         Destination = GameObject.FindGameObjectsWithTag("GoalArea");
         //Enemys = GameObject.FindGameObjectsWithTag("ENEMY_R" + StageLevel);
+        /*
         if (Npcs.Length > 0)
         {
             foreach (GameObject Npc in Npcs)
@@ -30,6 +31,7 @@ public class MarkGenerator : MonoBehaviour {
                 temp.GetComponent<MinimapMark>().target = Npc;//미니맵 타겟 지정
             }
         }
+        */
         if (Boxes.Length > 0)//박스 미니맵 생성
         {
             foreach (GameObject Box in Boxes)
