@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_kid : Enemy {
-    
-
+public class Boss_Enemy_kid : Enemy
+{
     private void Awake()
     {
         isDead = false;
         State = "Move";
-        HP = 5.0f;
-        Max_HP = 5.0f;
+        HP = 100.0f;
+        Max_HP = 100.0f;
         Speed = 2.0f;
         Power = 1.0f;
         EnemyAnimator = GetComponent<Animator>();
@@ -20,13 +19,15 @@ public class Enemy_kid : Enemy {
         environment = Refs[0].GetComponent<Environment>();
         Target = Refs[1];
     }
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         switch (State)
         {
             case "Idle":
@@ -39,11 +40,11 @@ public class Enemy_kid : Enemy {
                 break;
             case "Attack":
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
-                if(AttackReady) StartCoroutine(Attack());
+                if (AttackReady) StartCoroutine(Attack());
                 break;
             case "Die":
                 Dead();
-                
+
                 break;
             case "Exit":
                 break;
@@ -60,7 +61,7 @@ public class Enemy_kid : Enemy {
                 if (HP <= 0.0f)
                 {
                     isDead = true;
-                    environment.IncreaseMoney(5);
+                    environment.IncreaseMoney(150);
                     State = "Die";
                 }
                 environment.IncreaseScore(1, 0);

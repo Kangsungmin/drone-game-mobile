@@ -1,6 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 
 public class Environment : MonoBehaviour {
     const int EXIT = -1, DIE = 0, IDLE = 1, ATTACKED = 2;
@@ -26,6 +31,10 @@ public class Environment : MonoBehaviour {
     public Dictionary<int, int> NowGetParts = new Dictionary<int, int>();//지금까지 얻은 아이템
 
     public Transform DroneSpawn, EnemySpawn;
+
+    public Action<bool> isSetScore;
+    bool isSuccess;
+
     private void Awake()
     {
         DroneSpawn = transform.Find("DroneSpawnPoint");
@@ -70,6 +79,22 @@ public class Environment : MonoBehaviour {
         pas[2] = 3.0f;//적 수
         pas[3] = 5.0f;//남은 웨이브 호출
         StartCoroutine(EnemyWave(pas));
+
+        //세번째 웨이브
+        pas = new float[4];
+        pas[0] = 3.0f;//Enemy 종류
+        pas[1] = 150.0f;//시간
+        pas[2] = 1.0f;//적 수
+        pas[3] = 3.0f;//남은 웨이브 호출
+        StartCoroutine(EnemyWave(pas));
+
+        //네번째 웨이브
+        pas = new float[4];
+        pas[0] = 4.0f;//Enemy 종류
+        pas[1] = 10.0f;//시간
+        pas[2] = 1.0f;//적 수
+        pas[3] = 1.0f;//남은 웨이브 호출
+        StartCoroutine(EnemyWave(pas));
         //===========================적 생성========================================
 
         //===========================장애물 생성====================================
@@ -78,7 +103,10 @@ public class Environment : MonoBehaviour {
     }
     // Use this for initialization
     void Start() {
-
+        isSetScore = ((bool updatescore) =>
+        {
+            isSuccess = updatescore;
+        });
     }
 
     // Update is called once per frame
@@ -113,8 +141,12 @@ public class Environment : MonoBehaviour {
             case 2:
                 Enemy = Resources.Load("Prefabs/Enemy/Enemy_adult") as GameObject;
                 break;
-            case 3: break;
-            case 4: break;
+            case 3:
+                Enemy = Resources.Load("Prefabs/Enemy/Enemy_maam") as GameObject;
+                break;
+            case 4:
+                Enemy = Resources.Load("Prefabs/Enemy/Boss_Enemy_kid") as GameObject;
+                break;
         }
         
         GameObject[] tempRefs = new GameObject[2];
@@ -123,10 +155,10 @@ public class Environment : MonoBehaviour {
         int NumofEnemy = (int) pas[2];
         for (int i = 0; i < NumofEnemy; i++)
         {
-            float temp_x = Random.Range(-90.0f, 90.0f);
-            int sign = Random.value < .5 ? -1 : 1;
+            float temp_x = UnityEngine.Random.Range(-90.0f, 90.0f);
+            int sign = UnityEngine.Random.value < .5 ? -1 : 1;
             float temp_z = sign * Mathf.Sqrt(8100.0f - Mathf.Pow(temp_x, 2.0f) ); //원의 방정식, x를 랜덤하게 설정 y는 원의 반지름(90)에 의해 자동으로 결정
-            Vector3 temp = new Vector3(temp_x, 1, temp_z);
+            Vector3 temp = new Vector3(temp_x, 0.3f, temp_z);
 
             Enemy = Instantiate(Enemy, temp, Quaternion.identity);
             EnemyCount++;
@@ -172,8 +204,14 @@ public class Environment : MonoBehaviour {
         //UI 표시
         ui_Manager.GameEnd(MissionScore, NowGetParts);
 
-        googleexample ge = new googleexample();
-        ge.ShowLeaderBoardUI((long)MissionScore, "CgkIhNHUuPIJEAIQBg");
+        PlayGamesPlatform.Activate();
+
+        if (isSuccess && Social.localUser.authenticated)
+        {
+            Social.Active.ReportScore((long)MissionScore, GPGSIds.leaderboard_scoreboard, isSetScore);
+            ((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(GPGSIds.leaderboard_scoreboard);
+
+        }
     }
 
     IEnumerator MissionClear_To_DB(int getScore, Dictionary<int, int> getPartID)

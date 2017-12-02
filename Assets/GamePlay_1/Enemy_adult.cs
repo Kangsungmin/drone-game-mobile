@@ -9,8 +9,8 @@ public class Enemy_adult : Enemy {
     {
         isDead = false;
         State = "Move";
-        HP = 2.0f;
-        Max_HP = 1.0f;
+        HP = 10.0f;
+        Max_HP = 10.0f;
         Speed = 3.0f;
         Power = 2.0f;
         EnemyAnimator = GetComponent<Animator>();
@@ -35,6 +35,7 @@ public class Enemy_adult : Enemy {
             case "Idle":
                 break;
             case "Move":
+                EnemyAnimator.SetInteger("State",2);
                 transform.LookAt(Target.transform);
                 transform.Translate(transform.forward * Speed * Time.deltaTime, Space.World);//보는방향으로 움직인다.
                 if (Vector3.Distance(transform.position, Target.transform.position) < 5.0f) State = "Attack";
@@ -51,38 +52,51 @@ public class Enemy_adult : Enemy {
                 break;
         }
     }
-
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!isDead)
         {
-            HP -= 1.0f;
-            if (HP <= 0.0f)
+            if (other.CompareTag("Player"))
             {
-                environment.IncreaseMoney(10);
-                State = "Die";
+                HP -= 1.0f;
+                if (HP <= 0.0f)
+                {
+                    isDead = true;
+                    environment.IncreaseMoney(15);
+                    State = "Die";
+                }
+                environment.IncreaseScore(1, 0);
             }
-
-            environment.IncreaseScore(1, 0);
-        }
-        else if (other.CompareTag("Barrier"))
-        {
-            HP -= 1.0f;
-            if (HP <= 0.0f)
+            else if (other.CompareTag("Barrier"))
             {
-                environment.IncreaseMoney(10);
-                State = "Die";
+                HP -= 1.0f;
+                if (HP <= 0.0f)
+                {
+                    isDead = true;
+                    environment.IncreaseMoney(15);
+                    State = "Die";
+                }
             }
         }
+        
     }
 
     private void Dead()
     {
-        isDead = true;
-        EnemyAnimator.SetInteger("State", -1);//죽음
+        EnemyAnimator.enabled = false;
         StartCoroutine(ReserveUnable());//오브젝트 꺼짐 예약
         State = "Exit";
     }
+
+    IEnumerator Revive(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        EnemyAnimator.enabled = true;
+        EnemyAnimator.SetInteger("State", 1);
+        
+    }
+
     IEnumerator Attack()
     {
         AttackReady = false;

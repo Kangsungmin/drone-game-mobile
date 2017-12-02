@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Concrete : MonoBehaviour {
-    float Durable = 60.0f;
+    float Durable = 40.0f;
     // Use this for initialization
     void Awake () {
         StartCoroutine(DiscountDurable(Durable));

@@ -77,6 +77,7 @@ public class UIManager : MonoBehaviour {
     {
         switch (name)
         {
+
             case "Drink":
                 if (environment.AmountMoney >= 50)
                 {
@@ -99,9 +100,30 @@ public class UIManager : MonoBehaviour {
                 }
                 break;
             case "Container":
-                if (environment.AmountMoney >=5)
+                if (environment.AmountMoney >=80)
                 {
-                    environment.AmountMoney -= 5;
+                    environment.AmountMoney -= 80;
+                    Player.SendMessage("SpawnItem", name);
+                }
+                break;
+            case "Helmet_1":
+                if (environment.AmountMoney >= 60)
+                {
+                    environment.AmountMoney -= 60;
+                    Player.SendMessage("SpawnItem", name);
+                }
+                break;
+            case "Helmet_2":
+                if (environment.AmountMoney >= 130)
+                {
+                    environment.AmountMoney -= 60;
+                    Player.SendMessage("SpawnItem", name);
+                }
+                break;
+            case "Helmet_3":
+                if (environment.AmountMoney >= 300)
+                {
+                    environment.AmountMoney -= 60;
                     Player.SendMessage("SpawnItem", name);
                 }
                 break;

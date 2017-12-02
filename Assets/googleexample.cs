@@ -14,8 +14,6 @@ public class googleexample : MonoBehaviour
 
     public Text txt;
 
-    public Action<bool> isSetScore;
-
     string userid;
     string usernickname;
     string registration_checkURL = "http://13.124.188.186/registration_check.php";
@@ -30,8 +28,8 @@ public class googleexample : MonoBehaviour
 
     private void Start()
     {
-        isSetScore = isSuccess => txt.text = isSuccess.ToString();
-        //LogIn();
+        
+
     }
 
     private void Update()
@@ -44,63 +42,39 @@ public class googleexample : MonoBehaviour
         if (Social.Active.localUser.authenticated || mAuthenticating)
         {
             txt.text = "Ignoring repeated call to LogIn().";
-            Debug.LogError("Ignoring repeated call to LogIn().");
+            Debug.Log("Ignoring repeated call to LogIn().");
+
             return;
         }
 
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
-            .EnableSavedGames()
+            //.EnableSavedGames()
             .Build();
-        
+
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.Activate();
 
-        txt.text = "clicked:LogIn";
         Debug.Log("clicked:LogIn");
+
 
         string defaultleaderboard = GPGSIds.leaderboard_scoreboard;
         ((PlayGamesPlatform)Social.Active).SetDefaultLeaderboardForUI(defaultleaderboard);
-
+        PlayGamesPlatform.Instance.SetDefaultLeaderboardForUI(defaultleaderboard);
         mAuthenticating = true;
         Social.localUser.Authenticate(SignInCallback);
 
-        txt.text = "clicked:LogIn End";
         Debug.Log("clicked:LogIn End");
 
-    }
-
-    public void LogOut()
-    {
-        txt.text = "clicked:LogOut";
-        Debug.Log("clicked:LogOut");
-
-        PlayerPrefs.DeleteAll();
-        ((PlayGamesPlatform)Social.Active).SignOut();
-
-        SceneManager.LoadScene("flogintest");
-
-        txt.text = "clicked:LogOut End";
-        Debug.Log("clicked:LogOut End");
-
 
     }
 
-    private void SignInCallback(bool success, string p_val)
+    private void SignInCallback(bool success)
     {
-        txt.text = string.Format("SignInCallback: {0}, {1}, {2}"
-            , success
-            , p_val
-            , Social.localUser);
 
-        Debug.LogFormat("SignInCallback: {0}, {1}, {2}"
-            , success
-            , p_val
-            , Social.localUser);
 
-        string templog = string.Format("SignInCallback: {0}, {1}, {2}"
+        string templog = string.Format("SignInCallback: {0}, {1}"
             , success
-            , p_val
             , Social.localUser);
 
         print(templog);
@@ -110,14 +84,13 @@ public class googleexample : MonoBehaviour
         {
             if (Social.localUser == null)
             {
-                txt.text = "!! SignInCallback Error Null MainPlayer Data: ";
-                Debug.LogErrorFormat("!! SignInCallback Error Null MainPlayer Data: ");
+                txt.text = "Login Error";
+                Application.Quit();
             }
             else
             {
-                string userID = Social.localUser.id;
-                txt.text = string.Format("SignInCallback MainPlayer ID: {0}", userID);
-                Debug.LogFormat("SignInCallback MainPlayer ID: {0}", userID);
+                userid = Social.localUser.id;
+                txt.text = "Success!!";
 
                 StartCoroutine(Connect_Login());
             }
@@ -125,15 +98,16 @@ public class googleexample : MonoBehaviour
         else
         {
             txt.text = "Login Fail";
-            Debug.LogFormat("Login Fail ");
+
         }
     }
 
-    public void ShowLeaderBoardUI(long score, string ID)
+    /*
+    public void ShowLeaderBoardUI(string ID)
     {
         if (Social.Active.localUser.authenticated)
         {
-            setScore(score, ID);
+            setScore(10, ID);
             ((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(ID);
         }
         else
@@ -146,11 +120,13 @@ public class googleexample : MonoBehaviour
     {
         Social.ReportScore(score, ID, isSetScore);
 
+
     }
+    */
 
     IEnumerator Connect_Login()
     {
-        print(userid);
+        txt.text = "connect login, " + userid + "aa";
         WWWForm form = new WWWForm();
         form.AddField("userIDPost", userid);
 
@@ -158,7 +134,7 @@ public class googleexample : MonoBehaviour
         yield return data;
 
         string user_Data = data.text;
-
+        txt.text = "userdata: " + user_Data;
         if (user_Data == "\nNot Registered!")
         {
             print("no id");
@@ -196,7 +172,7 @@ public class googleexample : MonoBehaviour
     public void start_register_id()
     {
         print("recheck!!!!");
-        //	StartCoroutine (register_id ());
+        //   StartCoroutine (register_id ());
     }
 
     IEnumerator duplication_check()

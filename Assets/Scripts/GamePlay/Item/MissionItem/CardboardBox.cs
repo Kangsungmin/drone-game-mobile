@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CardboardBox : MonoBehaviour {
-    float Durable = 30.0f;
+    float Durable = 25.0f;
     // Use this for initialization
     void Awake()
     {

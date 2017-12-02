@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-//using Facebook.Unity;
 using UnityEngine.SceneManagement;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 
-public class Menu : MonoBehaviour {
+public class Menu : MonoBehaviour
+{
     public GameObject LevelMenu;
     public SceneFader fader;
 
@@ -17,24 +17,15 @@ public class Menu : MonoBehaviour {
     //public Text Path;
     //public AudioClip backMusic;
 
+    public Action<bool> isSetScore;
+    bool isSuccess;
+
     void Awake()
     {
+        isSetScore = result => isSuccess = result;
+
         Screen.SetResolution(1280, 800, true);
-        if (PlayerPrefs.GetInt("login_platform") == 1)
-        {
-            // facebok으로 로그인 한 상태
-            //FB.Init();
-        }
-        else if (PlayerPrefs.GetInt("login_platform") == 2)
-        {
-            
-            // google play로 로그인 한 상태
-            PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
-            PlayGamesPlatform.InitializeInstance(config);
-            GooglePlayGames.PlayGamesPlatform.DebugLogEnabled = false;
-            PlayGamesPlatform.Activate();
-            
-        }
+
     }
 
     void Start()
@@ -53,7 +44,7 @@ public class Menu : MonoBehaviour {
 
         //AudioSource.PlayClipAtPoint(backMusic,transform.position);
         //화면 사이즈 적용
-        
+
         Time.timeScale = 1;
         //Path.text = Application.dataPath;
         // Debug.Log("플레이어 레벨 : " + PlayerDataManager.level);
@@ -148,7 +139,7 @@ public class Menu : MonoBehaviour {
                 StartCoroutine(Spanner_Timer(60f - (float)(cur_time - time) % 60));
             }
         }
-        
+
 
 
     }
@@ -170,6 +161,7 @@ public class Menu : MonoBehaviour {
             print("에코 1받고 spanner 채움");
             PlayerDataManager.spanner = spanner_num;
             SpannerView.text = PlayerDataManager.spanner.ToString() + "/10";
+            PlayerDataManager.spanner_time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
         }
         else
         {
@@ -193,11 +185,19 @@ public class Menu : MonoBehaviour {
 
     }
 
-    public void Logout()
+    public void LogOut()
     {
 
-        googleexample ge = new googleexample();
-        ge.LogOut();
+        Debug.Log("clicked:LogOut");
+
+        PlayerPrefs.DeleteAll();
+        ((PlayGamesPlatform)Social.Active).SignOut();
+
+        SceneManager.LoadScene("flogintest");
+
+
+        Debug.Log("clicked:LogOut End");
+
     }
 
 }
