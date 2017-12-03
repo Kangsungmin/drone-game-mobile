@@ -58,9 +58,9 @@ public class googleexample : MonoBehaviour
         Debug.Log("clicked:LogIn");
 
 
-        string defaultleaderboard = GPGSIds.leaderboard_scoreboard;
-        ((PlayGamesPlatform)Social.Active).SetDefaultLeaderboardForUI(defaultleaderboard);
-        PlayGamesPlatform.Instance.SetDefaultLeaderboardForUI(defaultleaderboard);
+        //string defaultleaderboard = GPGSIds.leaderboard_scoreboard;
+       // ((PlayGamesPlatform)Social.Active).SetDefaultLeaderboardForUI(defaultleaderboard);
+       // PlayGamesPlatform.Instance.SetDefaultLeaderboardForUI(defaultleaderboard);
         mAuthenticating = true;
         Social.localUser.Authenticate(SignInCallback);
 

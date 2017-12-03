@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine;
+using System.Diagnostics;
 using UnityEngine.SceneManagement;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+
 
 public class Environment : MonoBehaviour {
     const int EXIT = -1, DIE = 0, IDLE = 1, ATTACKED = 2;
@@ -21,6 +22,7 @@ public class Environment : MonoBehaviour {
     //======Env variable========
     public static bool GameOver = false;
     public static int EnemyCount = 0;
+   
     //======Env variable========
     //======Main Human Variable=======
     private int MainState = IDLE;
@@ -28,6 +30,7 @@ public class Environment : MonoBehaviour {
     //======Main Human Variable=======
 
     public int AmountMoney=0, MissionScore=0;
+    public Stopwatch SW;
     public Dictionary<int, int> NowGetParts = new Dictionary<int, int>();//지금까지 얻은 아이템
 
     public Transform DroneSpawn, EnemySpawn;
@@ -37,6 +40,7 @@ public class Environment : MonoBehaviour {
 
     private void Awake()
     {
+        SW = new Stopwatch();
         DroneSpawn = transform.Find("DroneSpawnPoint");
         if (PlayerDataManager.nowUsingModel != null) PlayerDrone = Resources.Load("Prefabs/Drones/Drone_" + PlayerDataManager.nowUsingModel.getTitle()) as GameObject;
         else PlayerDrone = Resources.Load("Prefabs/Drones/Drone_Beginner") as GameObject;
@@ -72,6 +76,14 @@ public class Environment : MonoBehaviour {
         pas[3] = 4.0f;//남은 웨이브 호출
         StartCoroutine(EnemyWave(pas));
 
+        //첫번째 웨이브 보스
+        pas = new float[4];
+        pas[0] = 4.0f;//Enemy 종류
+        pas[1] = 40.0f;//시간
+        pas[2] = 1.0f;//적 수
+        pas[3] = 1.0f;//남은 웨이브 호출
+        StartCoroutine(EnemyWave(pas));
+
         //두번째 웨이브
         pas = new float[4];
         pas[0] = 2.0f;//Enemy 종류
@@ -88,13 +100,13 @@ public class Environment : MonoBehaviour {
         pas[3] = 3.0f;//남은 웨이브 호출
         StartCoroutine(EnemyWave(pas));
 
-        //네번째 웨이브
         pas = new float[4];
-        pas[0] = 4.0f;//Enemy 종류
-        pas[1] = 10.0f;//시간
+        pas[0] = 5.0f;//Enemy 종류
+        pas[1] = 170.0f;//시간
         pas[2] = 1.0f;//적 수
         pas[3] = 1.0f;//남은 웨이브 호출
         StartCoroutine(EnemyWave(pas));
+
         //===========================적 생성========================================
 
         //===========================장애물 생성====================================
@@ -107,6 +119,7 @@ public class Environment : MonoBehaviour {
         {
             isSuccess = updatescore;
         });
+        SW.Start();
     }
 
     // Update is called once per frame
@@ -118,6 +131,7 @@ public class Environment : MonoBehaviour {
             case EXIT:
                 break;
             case DIE:
+                MainHuman.SendMessage("Die");
                 GameEnd();
                 MainState = EXIT;
                 break;
@@ -146,6 +160,9 @@ public class Environment : MonoBehaviour {
                 break;
             case 4:
                 Enemy = Resources.Load("Prefabs/Enemy/Boss_Enemy_kid") as GameObject;
+                break;
+            case 5:
+                Enemy = Resources.Load("Prefabs/Enemy/Boss_Enemy_green") as GameObject;
                 break;
         }
         
@@ -196,6 +213,7 @@ public class Environment : MonoBehaviour {
 
     public void GameEnd()
     {
+        SW.Stop();
         PlayerDrone.GetComponent<Drone>().GameOver = true;
         PlayerDrone.GetComponent<Drone>().DronePowerOn = false;
         PlayerDrone.GetComponent<Drone>().DroneAnimator.enabled = false;
@@ -206,12 +224,12 @@ public class Environment : MonoBehaviour {
 
         PlayGamesPlatform.Activate();
 
-        if (isSuccess && Social.localUser.authenticated)
-        {
-            Social.Active.ReportScore((long)MissionScore, GPGSIds.leaderboard_scoreboard, isSetScore);
-            ((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(GPGSIds.leaderboard_scoreboard);
+        Social.Active.ReportScore((long)MissionScore, GPGSIds.leaderboard_scoreboard, isSetScore);
 
-        }
+       // if (isSuccess && Social.localUser.authenticated)
+        //{
+            ((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(GPGSIds.leaderboard_scoreboard);
+       // }
     }
 
     IEnumerator MissionClear_To_DB(int getScore, Dictionary<int, int> getPartID)

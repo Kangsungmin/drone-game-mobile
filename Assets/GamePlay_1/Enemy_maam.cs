@@ -9,10 +9,11 @@ public class Enemy_maam : Enemy {
     {
         isDead = false;
         State = "Move";
-        HP = 12.0f;
-        Max_HP = 12.0f;
-        Speed = 6.0f;
+        HP = 8.0f;
+        Max_HP = 8.0f;
+        Speed = 4.0f;
         Power = 2.0f;
+        money = 10;
         EnemyAnimator = GetComponent<Animator>();
     }
     public void SetReference(GameObject[] Refs)
@@ -34,7 +35,7 @@ public class Enemy_maam : Enemy {
             case "Idle":
                 break;
             case "Move":
-                EnemyAnimator.SetInteger("State", 1);
+                EnemyAnimator.SetInteger("State", 2);
                 transform.LookAt(Target.transform);
                 transform.Translate(transform.forward * Speed * Time.deltaTime, Space.World);//보는방향으로 움직인다.
                 if (Vector3.Distance(transform.position, Target.transform.position) < 5.0f) State = "Attack";
@@ -42,6 +43,9 @@ public class Enemy_maam : Enemy {
             case "Attack":
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
                 if (AttackReady) StartCoroutine(Attack());
+                break;
+            case "Blocked":
+                //애니메이션은 그대로, 포지션 이동은 하지 않는다.
                 break;
             case "Die":
                 Dead();
@@ -58,37 +62,49 @@ public class Enemy_maam : Enemy {
         {
             if (other.CompareTag("Player"))
             {
-                HP -= 1.0f;
-                if (HP <= 0.0f)
-                {
-                    isDead = true;
-                    environment.IncreaseMoney(12);
-                    State = "Die";
-                }
+                Damaged(1.0f);
                 environment.IncreaseScore(1, 0);
             }
             else if (other.CompareTag("Barrier"))
             {
-                HP -= 1.0f;
-                if (HP <= 0.0f)
+                if (!State.Equals("Blocked"))
                 {
-                    isDead = true;
-                    environment.IncreaseMoney(12);
-                    State = "Die";
+                    StartCoroutine(Blocked());
                 }
+
             }
         }
     }
 
+    private void Damaged(float amount)
+    {
+        HP -= amount;
+        if (HP <= 0.0f)
+        {
+            isDead = true;
+            environment.IncreaseMoney(money);
+            State = "Die";
+        }
+    }
+
+    IEnumerator Blocked()
+    {
+        State = "Blocked";
+        Damaged(1.0f);
+        environment.IncreaseScore(1, 0);
+        yield return new WaitForSeconds(0.5f);
+        State = "Move";
+    }
 
     private void Dead()
     {
         isDead = true;
-        //EnemyAnimator.SetInteger("State", -1);//죽음
         EnemyAnimator.enabled = false;
+        boxcoll.enabled = false;
         StartCoroutine(ReserveUnable());//오브젝트 꺼짐 예약
         State = "Exit";
     }
+
     IEnumerator Attack()
     {
         AttackReady = false;

@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MainHuman : MonoBehaviour {
+    public Animator Ani;
 
-	// Use this for initialization
-	void Start () {
+    private void Awake()
+    {
+    }
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -13,4 +17,9 @@ public class MainHuman : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void Die()
+    {
+        Ani.enabled = false;
+    }
 }

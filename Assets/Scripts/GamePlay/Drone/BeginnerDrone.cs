@@ -188,37 +188,6 @@ public class BeginnerDrone : Drone
     }
     
     //=============================드론 충돌 판정[시작]=============================
-    void OnCollisionEnter(Collision collision)//오브젝트와 충돌시 호출.
-    {
-        if (collision.gameObject.tag.Contains("Box"))
-        {
-            //박스는 무시
-        }
-        else if (collision.gameObject.tag.Contains("Car"))
-        {
-            /*
-            thisRB.drag = 0.0f;
-            DronePowerOn = false;
-            DroneAnimator.enabled = false;
-            GameOver = true;
-            Playenv.GameOver = true;
-            playEnvironment.GetComponent<Playenv>().GameEnd();//게임종료시킴
-            */
-        }
-        else
-        {
-            float v = thisRB.velocity.magnitude;
-            if (v > 10.0f)
-            {
-                //Hit((int) (v * 0.5f) );
-                DropSomthing();
-            }
-            else if (thisRB.velocity.magnitude > 2.5f)
-            {
-                playEnvironment.GetComponent<Environment>().IncreaseScore(1, 0);
-            }
-        }
-    }
     //=============================드론 충돌 판정[끝]===============================
 
     
@@ -270,6 +239,7 @@ public class BeginnerDrone : Drone
 
     public void SpawnItem(string ItemName)
     {
+        //랜덤하게 넘겨받은 아이템 스폰
         GameObject Item = Resources.Load("Prefabs/Items/"+ ItemName) as GameObject;
         Item = Instantiate(Item, Claw.transform.position, Claw.transform.rotation);
     }

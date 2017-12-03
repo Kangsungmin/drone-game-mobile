@@ -8,11 +8,6 @@ public class Concrete : MonoBehaviour {
     void Awake () {
         StartCoroutine(DiscountDurable(Durable));
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
     
     IEnumerator DiscountDurable(float time)
     {

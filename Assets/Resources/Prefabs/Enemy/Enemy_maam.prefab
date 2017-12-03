@@ -816,7 +816,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1968800817417436}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.381828, y: -2.1760204e-17, z: 29.399773}
+  m_LocalPosition: {x: 14.348623, y: -6.628555e-18, z: 8.955708}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4453680979305546}
@@ -1320,6 +1320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyAnimator: {fileID: 95492939363629302}
+  boxcoll: {fileID: 65762147959354410}
 --- !u!135 &135237443269787952
 SphereCollider:
   m_ObjectHideFlags: 1

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Boss_Enemy_kid : Enemy
 {
+
     private void Awake()
     {
         isDead = false;
@@ -11,7 +12,8 @@ public class Boss_Enemy_kid : Enemy
         HP = 100.0f;
         Max_HP = 100.0f;
         Speed = 2.0f;
-        Power = 1.0f;
+        Power = 10.0f;
+        money = 100;
         EnemyAnimator = GetComponent<Animator>();
     }
     public void SetReference(GameObject[] Refs)
@@ -42,6 +44,9 @@ public class Boss_Enemy_kid : Enemy
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
                 if (AttackReady) StartCoroutine(Attack());
                 break;
+            case "Blocked":
+                //애니메이션은 그대로, 포지션 이동은 하지 않는다.
+                break;
             case "Die":
                 Dead();
 
@@ -57,36 +62,49 @@ public class Boss_Enemy_kid : Enemy
         {
             if (other.CompareTag("Player"))
             {
-                HP -= 1.0f;
-                if (HP <= 0.0f)
-                {
-                    isDead = true;
-                    environment.IncreaseMoney(150);
-                    State = "Die";
-                }
+                Damaged(1.0f);
                 environment.IncreaseScore(1, 0);
             }
             else if (other.CompareTag("Barrier"))
             {
-                HP -= 1.0f;
-                if (HP <= 0.0f)
+                if (!State.Equals("Blocked"))
                 {
-                    isDead = true;
-                    environment.IncreaseMoney(5);
-                    State = "Die";
+                    StartCoroutine(Blocked());
                 }
+
             }
         }
     }
 
+    private void Damaged(float amount)
+    {
+        HP -= amount;
+        if (HP <= 0.0f)
+        {
+            isDead = true;
+            environment.IncreaseMoney(money);
+            State = "Die";
+        }
+    }
+
+    IEnumerator Blocked()
+    {
+        State = "Blocked";
+        Damaged(1.0f);
+        environment.IncreaseScore(1, 0);
+        yield return new WaitForSeconds(0.5f);
+        State = "Move";
+    }
 
     private void Dead()
     {
         isDead = true;
         EnemyAnimator.enabled = false;
+        boxcoll.enabled = false;
         StartCoroutine(ReserveUnable());//오브젝트 꺼짐 예약
         State = "Exit";
     }
+
     IEnumerator Attack()
     {
         AttackReady = false;

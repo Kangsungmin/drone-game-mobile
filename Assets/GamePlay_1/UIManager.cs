@@ -11,13 +11,24 @@ public class UIManager : MonoBehaviour {
     public GameObject MainHuman;
 
     //========스코어 변수==========
-    public Text ScoreText, MoneyText, AchivementText;
+    public Text ScoreText, MoneyText, TimeText, AchivementText;
     public Animator ScoreAni, AchiveAni;
+    string TimeCount = "";
     //========스코어 변수==========
 
     //========게임종료 변수===========
     public Text ResultScore, ResultTime;
     //========게임종료 변수===========
+
+    //========랜덤 장애물아이템 변수============
+    enum Barrier{
+        Box,
+        Concrete,
+        Container,
+        Statue_Head,
+        NumOfBarriers
+    };
+    //========랜덤 장애물아이템 변수============
 
     public GameObject GameEndPanel, ShopPanel, MissionPanelButtons, PauseMenu, GaugeUI, LiftButtonBG, LiftButton, BatteryChangeButton;
     public Image LeftJoystick, RightJoystick, FuelBar, MainHPBar;
@@ -55,6 +66,8 @@ public class UIManager : MonoBehaviour {
         {
             ScoreText.text = environment.MissionScore.ToString();
             MoneyText.text = environment.AmountMoney.ToString();
+            TimeCount = string.Format("{0:0} 초", environment.SW.ElapsedMilliseconds * 0.001);
+            TimeText.text = TimeCount;
             Fuel = Player.Fuel;
             MaxFuel = Player.Max_Fuel;
             FuelBar.fillAmount = (float)Fuel / (float)MaxFuel;
@@ -85,6 +98,16 @@ public class UIManager : MonoBehaviour {
                     environment.Main_HP += 20.0f;
                 }
                 break;
+            case "Barrier":
+                if (environment.AmountMoney >= 30)
+                {
+                    environment.AmountMoney -= 30;
+
+                    Barrier temp = (Barrier) Random.Range(0, (int) Barrier.NumOfBarriers);//랜덤하게 장애물 변환
+                    Player.SendMessage("SpawnItem", temp.ToString());
+                }
+                break;
+                /*
             case "Box":
                 if (environment.AmountMoney >= 20)
                 {
@@ -127,7 +150,7 @@ public class UIManager : MonoBehaviour {
                     Player.SendMessage("SpawnItem", name);
                 }
                 break;
-
+                */
         }
     }
     public void ShopCall()
@@ -146,12 +169,14 @@ public class UIManager : MonoBehaviour {
     {
         PauseMenu.SetActive(true);
         Time.timeScale = 0;
+        environment.SW.Stop();
     }
 
     public void ContinuePlay()
     {
         PauseMenu.SetActive(false);
         Time.timeScale = 1;
+        environment.SW.Start();
     }
 
     public void ForceEnd()
@@ -164,7 +189,7 @@ public class UIManager : MonoBehaviour {
         
         GameEndPanel.SetActive(true);
         ResultScore.text = getScore.ToString();
-
+        ResultTime.text = TimeCount;
     }
 
     public void ExitGamePlay()
