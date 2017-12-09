@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Boss_Enemy_kid : Enemy
 {
-
+    bool AniOn;
     private void Awake()
     {
         isDead = false;
@@ -15,16 +16,21 @@ public class Boss_Enemy_kid : Enemy
         Power = 10.0f;
         money = 100;
         EnemyAnimator = GetComponent<Animator>();
+        AniOn = false;
     }
     public void SetReference(GameObject[] Refs)
     {
         environment = Refs[0].GetComponent<Environment>();
         Target = Refs[1];
-    }
-    // Use this for initialization
-    void Start()
-    {
 
+        // Navigation 적용
+        myTransform = this.gameObject.GetComponent<Transform>();
+        playerTransform = Target.GetComponent<Transform>();
+        nvAgent = this.gameObject.GetComponent<NavMeshAgent>();
+        nvAgent.enabled = false;
+        nvAgent.enabled = true;
+        nvAgent.destination = playerTransform.position;
+        // --------------
     }
 
     // Update is called once per frame
@@ -35,12 +41,14 @@ public class Boss_Enemy_kid : Enemy
             case "Idle":
                 break;
             case "Move":
-                EnemyAnimator.SetInteger("State", 2);
-                transform.LookAt(Target.transform);
-                transform.Translate(transform.forward * Speed * Time.deltaTime, Space.World);//보는방향으로 움직인다.
-                if (Vector3.Distance(transform.position, Target.transform.position) < 5.0f) State = "Attack";
+                EnemyAnimator.SetInteger("State", 1);
+                //transform.LookAt(Target.transform);
+                //transform.Translate(transform.forward * Speed * Time.deltaTime, Space.World);//보는방향으로 움직인다.
+                transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
+                if (Vector3.Distance(transform.position, Target.transform.position) < 9.0f) State = "Attack";
                 break;
             case "Attack":
+                nvAgent.enabled = false;
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
                 if (AttackReady) StartCoroutine(Attack());
                 break;
@@ -48,6 +56,7 @@ public class Boss_Enemy_kid : Enemy
                 //애니메이션은 그대로, 포지션 이동은 하지 않는다.
                 break;
             case "Die":
+                nvAgent.enabled = false;
                 Dead();
 
                 break;
@@ -63,7 +72,7 @@ public class Boss_Enemy_kid : Enemy
             if (other.CompareTag("Player"))
             {
                 Damaged(1.0f);
-                environment.IncreaseScore(1, 0);
+               
             }
             else if (other.CompareTag("Barrier"))
             {
@@ -71,29 +80,34 @@ public class Boss_Enemy_kid : Enemy
                 {
                     StartCoroutine(Blocked());
                 }
-
             }
         }
     }
 
     private void Damaged(float amount)
     {
+        
         HP -= amount;
+        environment.IncreaseScore((int)amount, 0);
         if (HP <= 0.0f)
         {
             isDead = true;
             environment.IncreaseMoney(money);
             State = "Die";
         }
+        else if(!AniOn) StartCoroutine(GetHitMotion());
     }
 
     IEnumerator Blocked()
     {
         State = "Blocked";
         Damaged(1.0f);
+        nvAgent.updatePosition = false;
         environment.IncreaseScore(1, 0);
         yield return new WaitForSeconds(0.5f);
-        State = "Move";
+        if (!isDead)
+            State = "Move";
+        nvAgent.updatePosition = true;
     }
 
     private void Dead()
@@ -119,5 +133,15 @@ public class Boss_Enemy_kid : Enemy
         yield return new WaitForSeconds(8.0f);
         Environment.EnemyCount -= 1;
         gameObject.SetActive(false);
+    }
+
+    IEnumerator GetHitMotion()
+    {
+        AniOn = true;
+        EnemyAnimator.Play("Zombie Die_01", 0, 0.0f);
+        yield return new WaitForSeconds(0.18f);
+        
+        EnemyAnimator.SetInteger("State", 1);
+        AniOn = false;
     }
 }

@@ -7,38 +7,31 @@ using System.Collections;
 public class VirtualJS_Left : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
 
-    private Image bgImg;
-    private Image joystickImg;
+    private Image bgimg;
+    private Image stickimg;
+    private Vector3 inputVector = Vector3.zero;
 
-    public Vector3 inputVector { set; get; }
-
-    private void Start()
+    // Use this for initialization
+    void Start()
     {
-        bgImg = GetComponent<Image>();
-        joystickImg = transform.GetChild(0).GetComponent<Image>();//내부 조이스틱
-        inputVector = Vector3.zero;
+        bgimg = GetComponent<Image>();
+        stickimg = transform.GetChild(0).GetComponent<Image>();
+
     }
+
+
     public virtual void OnDrag(PointerEventData ped)
     {
-
-        Vector2 pos = Vector2.zero;
-
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(bgImg.rectTransform, ped.position, ped.pressEventCamera, out pos))
+        Vector2 pos;
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(bgimg.rectTransform, ped.position, ped.pressEventCamera, out pos))
         {
-            pos.x = (pos.x / bgImg.rectTransform.sizeDelta.x);
-            pos.y = (pos.y / bgImg.rectTransform.sizeDelta.y);
+            pos.x = (pos.x / bgimg.rectTransform.sizeDelta.x);
+            pos.y = (pos.y / bgimg.rectTransform.sizeDelta.y);
 
-            float x = (bgImg.rectTransform.pivot.x == 1) ? pos.x * 2 + 1 : pos.x * 2 - 1;
-            float y = (bgImg.rectTransform.pivot.y == 1) ? pos.y * 2 + 1 : pos.y * 2 - 1;
+            inputVector = new Vector3(pos.x, pos.y, 0);
+            inputVector = (inputVector.magnitude > 1.0f) ? inputVector.normalized : inputVector;
 
-            inputVector = new Vector3(x, 0, y);
-            inputVector = (inputVector.magnitude > 1) ? inputVector.normalized : inputVector;//1보다 클 경우 처리
-
-            joystickImg.rectTransform.anchoredPosition = new Vector3(inputVector.x * (bgImg.rectTransform.sizeDelta.x / 3), inputVector.z *
-                (bgImg.rectTransform.sizeDelta.y / 3));//이미지를 움직임
-            
-            //실제 드론 움직임으로 변환하기 위해 적정 값 곱함.
-
+            stickimg.rectTransform.anchoredPosition = new Vector3(inputVector.x * (bgimg.rectTransform.sizeDelta.x / 3), inputVector.y * (bgimg.rectTransform.sizeDelta.y / 3));
         }
     }
 
@@ -47,10 +40,10 @@ public class VirtualJS_Left : MonoBehaviour, IDragHandler, IPointerUpHandler, IP
         OnDrag(ped);
     }
 
-    public virtual void OnPointerUp(PointerEventData ped)//조이스틱 떼었을때
+    public virtual void OnPointerUp(PointerEventData ped)
     {
         inputVector = Vector3.zero;
-        joystickImg.rectTransform.anchoredPosition = Vector3.zero;//조이스틱 원점이동
+        stickimg.rectTransform.anchoredPosition = Vector3.zero;
     }
 
     public float Horizontal()
@@ -61,7 +54,7 @@ public class VirtualJS_Left : MonoBehaviour, IDragHandler, IPointerUpHandler, IP
 
     public float Vertical()
     {
-        if (inputVector.z != 0) return inputVector.z;
+        if (inputVector.y != 0) return inputVector.y;
         else return Input.GetAxis("Forward");
     }
 }

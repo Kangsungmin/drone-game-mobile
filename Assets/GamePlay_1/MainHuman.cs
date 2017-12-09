@@ -20,6 +20,6 @@ public class MainHuman : MonoBehaviour {
 
     public void Die()
     {
-        Ani.enabled = false;
+        Ani.SetInteger("State", -1);
     }
 }

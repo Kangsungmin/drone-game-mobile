@@ -14,6 +14,8 @@ TagManager:
   - NPC_R3
   - NPC_R1
   - Barrier
+  - Bomb
+  - Enemy
   layers:
   - Default
   - TransparentFX

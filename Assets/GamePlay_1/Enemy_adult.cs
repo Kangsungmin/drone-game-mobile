@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy_adult : Enemy {
 
@@ -20,6 +21,15 @@ public class Enemy_adult : Enemy {
     {
         environment = Refs[0].GetComponent<Environment>();
         Target = Refs[1];
+
+        // Navigation 적용
+        myTransform = this.gameObject.GetComponent<Transform>();
+        playerTransform = Target.GetComponent<Transform>();
+        nvAgent = this.gameObject.GetComponent<NavMeshAgent>();
+        nvAgent.enabled = false;
+        nvAgent.enabled = true;
+        nvAgent.destination = playerTransform.position;
+        // --------------
     }
     // Use this for initialization
     void Start()
@@ -36,11 +46,12 @@ public class Enemy_adult : Enemy {
                 break;
             case "Move":
                 EnemyAnimator.SetInteger("State", 2);
-                transform.LookAt(Target.transform);
-                transform.Translate(transform.forward * Speed * Time.deltaTime, Space.World);//보는방향으로 움직인다.
+                //transform.LookAt(Target.transform);
+                //transform.Translate(transform.forward * Speed * Time.deltaTime, Space.World);//보는방향으로 움직인다.
                 if (Vector3.Distance(transform.position, Target.transform.position) < 5.0f) State = "Attack";
                 break;
             case "Attack":
+                nvAgent.enabled = false;
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
                 if (AttackReady) StartCoroutine(Attack());
                 break;
@@ -48,6 +59,7 @@ public class Enemy_adult : Enemy {
                 //애니메이션은 그대로, 포지션 이동은 하지 않는다.
                 break;
             case "Die":
+                nvAgent.enabled = false;
                 Dead();
 
                 break;
@@ -63,7 +75,7 @@ public class Enemy_adult : Enemy {
             if (other.CompareTag("Player"))
             {
                 Damaged(1.0f);
-                environment.IncreaseScore(1, 0);
+                
             }
             else if (other.CompareTag("Barrier"))
             {
@@ -79,6 +91,7 @@ public class Enemy_adult : Enemy {
     private void Damaged(float amount)
     {
         HP -= amount;
+        environment.IncreaseScore((int)amount, 0);
         if (HP <= 0.0f)
         {
             isDead = true;
@@ -91,9 +104,12 @@ public class Enemy_adult : Enemy {
     {
         State = "Blocked";
         Damaged(1.0f);
+        nvAgent.updatePosition = false;
         environment.IncreaseScore(1, 0);
         yield return new WaitForSeconds(0.5f);
-        State = "Move";
+        if (!isDead)
+            State = "Move";
+        nvAgent.updatePosition = true;
     }
 
     private void Dead()

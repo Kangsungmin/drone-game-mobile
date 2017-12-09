@@ -62,7 +62,8 @@ public class Menu : MonoBehaviour
     public void SingleplayBtn()
     {
         //Invoke("startGame", .1f);
-        LevelMenu.SetActive(true);
+        //LevelMenu.SetActive(true);
+
     }
     public void SingleplayExit()
     {
@@ -191,6 +192,15 @@ public class Menu : MonoBehaviour
         Debug.Log("clicked:LogOut");
 
         PlayerPrefs.DeleteAll();
+
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+            //.EnableSavedGames()
+            .Build();
+
+        PlayGamesPlatform.DebugLogEnabled = true;
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.Activate();
+
         ((PlayGamesPlatform)Social.Active).SignOut();
 
         SceneManager.LoadScene("flogintest");

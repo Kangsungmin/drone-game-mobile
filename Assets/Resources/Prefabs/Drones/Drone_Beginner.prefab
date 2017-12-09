@@ -217,7 +217,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4583854223760564}
-  - component: {fileID: 114806552407245404}
   m_Layer: 0
   m_Name: Claw
   m_TagString: Untagged
@@ -262,7 +261,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1539760782667894}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.38417, y: 0.415, z: 2.943954}
+  m_LocalPosition: {x: -9.137393, y: 0, z: 0.4261409}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4884007054810096}
@@ -722,20 +721,6 @@ MonoBehaviour:
   grabEffect: {fileID: 198505973129286608}
   GoalInEffect: {fileID: 198216737533570780}
   ElecEffect: {fileID: 198182893564743078}
---- !u!114 &114806552407245404
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1818744944413626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bb5b018edc13694a90c30cbce118626, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GrabButtonAni: {fileID: 0}
-  GrabButton: {fileID: 0}
-  GaugueUI: {fileID: 0}
 --- !u!198 &198182893564743078
 ParticleSystem:
   m_ObjectHideFlags: 1

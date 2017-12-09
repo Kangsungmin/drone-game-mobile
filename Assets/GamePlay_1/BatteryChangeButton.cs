@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class BatteryChangeButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+    public Image Process, ProcessBG;
     bool pointed = false;
     float NeededTime = 20.0f, NeededTime_Max = 20.0f;
     Drone PlayerDrone;
@@ -14,7 +15,9 @@ public class BatteryChangeButton : MonoBehaviour, IPointerDownHandler, IPointerU
     void Awake()
     {
         NeededTime = 20.0f;
-        NeededTimeText.text = "배터리교체";
+        NeededTimeText.text = "20.0";
+        Process.gameObject.SetActive(false);
+        ProcessBG.gameObject.SetActive(false);
     }
     public void SetReference(GameObject[] Refs)
     {
@@ -39,12 +42,14 @@ public class BatteryChangeButton : MonoBehaviour, IPointerDownHandler, IPointerU
                 
             }
         }
-        GetComponent<Image>().fillAmount = (float)NeededTime / NeededTime_Max;
+        if(Process.gameObject.activeSelf) Process.fillAmount = (float)NeededTime / NeededTime_Max;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         pointed = true;
+        Process.gameObject.SetActive(true);
+        ProcessBG.gameObject.SetActive(true);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -57,6 +62,8 @@ public class BatteryChangeButton : MonoBehaviour, IPointerDownHandler, IPointerU
     {
         pointed = false;
         NeededTime = NeededTime_Max;
-        NeededTimeText.text = "배터리교체";
+        NeededTimeText.text = "20.0";
+        Process.gameObject.SetActive(false);
+        ProcessBG.gameObject.SetActive(false);
     }
 }

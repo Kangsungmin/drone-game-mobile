@@ -36,7 +36,7 @@ public class BeginnerDrone : Drone
         tempRef[0] = ui_Manager.LiftButton.gameObject;
         tempRef[1] = ui_Manager.LiftButtonAni;
         tempRef[2] = ui_Manager.GaugeUI;
-        Claw.SendMessage("SetReference", tempRef);
+        //Claw.SendMessage("SetReference", tempRef);
     }
     void Start()
     {
@@ -86,7 +86,7 @@ public class BeginnerDrone : Drone
         if (DronePowerOn)//드론 작동 가능 시,
         {
             currentY = transform.eulerAngles.y;
-            bodyDir.z = -50.0f * moveJoystickLeft.Horizontal();//몸체 좌우 회전
+            bodyDir.z = -40.0f * moveJoystickLeft.Horizontal();//몸체 좌우 회전
             bodyDir.x = 30.0f * moveJoystickLeft.Vertical();
             bodyDir.y = currentY;
             bodyDir.y += 3.0f * moveJoystickRight.Horizontal();

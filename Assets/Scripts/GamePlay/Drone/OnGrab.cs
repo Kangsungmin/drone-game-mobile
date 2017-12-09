@@ -21,7 +21,7 @@ public class OnGrab : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	void Start () {
         grabState = "Idle";
-        GaugeUI.SetActive(false);
+        //GaugeUI.SetActive(false);
     }
 
     public void OnPointerDown(PointerEventData eventData)//버튼 눌린상태

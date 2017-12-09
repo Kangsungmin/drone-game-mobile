@@ -9,11 +9,13 @@ public class UIManager : MonoBehaviour {
     public Drone Player;
     public Environment environment;
     public GameObject MainHuman;
-
+    
     //========스코어 변수==========
-    public Text ScoreText, MoneyText, TimeText, AchivementText;
+    public Text ScoreText, MoneyText, TimeText, AchivementText, BombCountText;
     public Animator ScoreAni, AchiveAni;
     string TimeCount = "";
+    public Transform DamageSpawn;
+    public GameObject Damage;
     //========스코어 변수==========
 
     //========게임종료 변수===========
@@ -38,6 +40,7 @@ public class UIManager : MonoBehaviour {
     private void Awake()
     {
         BatteryChangeButton.SetActive(false);
+        environment = GameObject.Find("ENVIRONMENT").GetComponent<Environment>();
     }
 
     public void SetReference(GameObject[] Refs)//Environment에서 호출
@@ -49,15 +52,13 @@ public class UIManager : MonoBehaviour {
         tempRefs[0] = Refs[0];//Drone Object
         tempRefs[1] = Refs[0].transform.Find("Claw").gameObject;//Claw
         tempRefs[2] = LiftButtonBG;//리프팅 버튼 Ani
-        LiftButton.SendMessage("SetReference", tempRefs);//드론, Claw, GrabModeCtrl
+        //LiftButton.SendMessage("SetReference", tempRefs);//드론, Claw, GrabModeCtrl
 
         tempRefs = new GameObject[1];
         tempRefs[0] = Refs[0];
-        BatteryChangeButton.transform.GetChild(0).SendMessage("SetReference", tempRefs);
+        BatteryChangeButton.SendMessage("SetReference", tempRefs);
     }
-
-    void Start () {
-    }
+    
 
     // Update is called once per frame
     void Update()
@@ -66,6 +67,7 @@ public class UIManager : MonoBehaviour {
         {
             ScoreText.text = environment.MissionScore.ToString();
             MoneyText.text = environment.AmountMoney.ToString();
+            BombCountText.text = "X "+environment.LeftBombCount.ToString();
             TimeCount = string.Format("{0:0} 초", environment.SW.ElapsedMilliseconds * 0.001);
             TimeText.text = TimeCount;
             Fuel = Player.Fuel;
@@ -85,6 +87,7 @@ public class UIManager : MonoBehaviour {
             else BatteryChangeButton.SetActive(false);
         }
     }
+    
 
     public void BuyItem(string name)
     {
@@ -92,67 +95,34 @@ public class UIManager : MonoBehaviour {
         {
 
             case "Drink":
-                if (environment.AmountMoney >= 50)
+                if (environment.AmountMoney >= 70)
                 {
-                    environment.AmountMoney -= 50;
+                    environment.AmountMoney -= 70;
                     environment.Main_HP += 20.0f;
                 }
                 break;
             case "Barrier":
-                if (environment.AmountMoney >= 30)
+                if (environment.AmountMoney >= 50)
                 {
-                    environment.AmountMoney -= 30;
+                    environment.AmountMoney -= 50;
 
                     Barrier temp = (Barrier) Random.Range(0, (int) Barrier.NumOfBarriers);//랜덤하게 장애물 변환
                     Player.SendMessage("SpawnItem", temp.ToString());
                 }
                 break;
-                /*
-            case "Box":
-                if (environment.AmountMoney >= 20)
-                {
-                    environment.AmountMoney -= 20;
-                    Player.SendMessage("SpawnItem", name);
-                }
-                break;
-            case "Concrete":
-                if (environment.AmountMoney >= 50)
-                {
-                    environment.AmountMoney -= 50;
-                    Player.SendMessage("SpawnItem", name);
-                }
-                break;
-            case "Container":
-                if (environment.AmountMoney >=80)
-                {
-                    environment.AmountMoney -= 80;
-                    Player.SendMessage("SpawnItem", name);
-                }
-                break;
-            case "Helmet_1":
-                if (environment.AmountMoney >= 60)
-                {
-                    environment.AmountMoney -= 60;
-                    Player.SendMessage("SpawnItem", name);
-                }
-                break;
-            case "Helmet_2":
-                if (environment.AmountMoney >= 130)
-                {
-                    environment.AmountMoney -= 60;
-                    Player.SendMessage("SpawnItem", name);
-                }
-                break;
-            case "Helmet_3":
-                if (environment.AmountMoney >= 300)
-                {
-                    environment.AmountMoney -= 60;
-                    Player.SendMessage("SpawnItem", name);
-                }
-                break;
-                */
         }
     }
+
+    public void Fire()
+    {
+        if(environment.LeftBombCount > 0)
+        {
+            Player.SendMessage("SpawnItem", "RocketGen");
+            environment.LeftBombCount--;
+        }
+
+    }
+
     public void ShopCall()
     {
         if(ShopPanel.activeSelf) ShopPanel.SetActive(false);
@@ -162,6 +132,12 @@ public class UIManager : MonoBehaviour {
     public void IncreaseScoreAni()
     {
         ScoreAni.Play("IncreaseScore", 0, 0.0f);
+    }
+    public void DamageAni()
+    {
+        GameObject temp = Instantiate(Damage, DamageSpawn.position, Quaternion.identity);
+        temp.transform.SetParent(DamageSpawn);
+        temp.GetComponent<Animator>().SetInteger("value",Random.Range(1,4));
     }
     
 

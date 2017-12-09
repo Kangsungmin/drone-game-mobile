@@ -26,10 +26,9 @@ public class googleexample : MonoBehaviour
 
     public Canvas nicknamecanvas;
 
-    private void Start()
+    private void Awake()
     {
-        
-
+        Screen.SetResolution(1280, 800, true);
     }
 
     private void Update()

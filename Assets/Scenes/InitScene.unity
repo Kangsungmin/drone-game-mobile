@@ -290,7 +290,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 01a7e5fc5c26fea479ad9f7301c24179, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 104e528fa9f008447ad6cc3170c2ae53, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -607,7 +607,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InternetNotWorkPopup: {fileID: 195175211}
-  GoogleManager: {fileID: 86107685}
 --- !u!4 &823332670
 Transform:
   m_ObjectHideFlags: 0
@@ -722,11 +721,11 @@ Prefab:
     - target: {fileID: 223661317038994586, guid: 0b3dde680bf1d5348bc539772c78f3c0,
         type: 2}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1650142343418296, guid: 0b3dde680bf1d5348bc539772c78f3c0, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b3dde680bf1d5348bc539772c78f3c0, type: 2}

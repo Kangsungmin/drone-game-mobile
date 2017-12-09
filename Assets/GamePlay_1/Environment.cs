@@ -22,7 +22,7 @@ public class Environment : MonoBehaviour {
     //======Env variable========
     public static bool GameOver = false;
     public static int EnemyCount = 0;
-   
+    public int LeftBombCount = 5;
     //======Env variable========
     //======Main Human Variable=======
     private int MainState = IDLE;
@@ -40,6 +40,14 @@ public class Environment : MonoBehaviour {
 
     private void Awake()
     {
+        GameOver = false;
+        //현재 기기가 모바일 일때,
+        //플레이어데이터매니저에 값이 없다면 다시 Init씬으로 간다.
+        //모바일이 아닐때는 그냥 실행
+#if (UNITY_ANDROID == true && UNITY_EDITOR == false)
+        if (PlayerDataManager.userID == null) SceneManager.LoadScene("InitScene");
+#endif
+
         SW = new Stopwatch();
         DroneSpawn = transform.Find("DroneSpawnPoint");
         if (PlayerDataManager.nowUsingModel != null) PlayerDrone = Resources.Load("Prefabs/Drones/Drone_" + PlayerDataManager.nowUsingModel.getTitle()) as GameObject;
@@ -79,7 +87,7 @@ public class Environment : MonoBehaviour {
         //첫번째 웨이브 보스
         pas = new float[4];
         pas[0] = 4.0f;//Enemy 종류
-        pas[1] = 40.0f;//시간
+        pas[1] = 50.0f;//시간
         pas[2] = 1.0f;//적 수
         pas[3] = 1.0f;//남은 웨이브 호출
         StartCoroutine(EnemyWave(pas));
@@ -104,6 +112,20 @@ public class Environment : MonoBehaviour {
         pas[0] = 5.0f;//Enemy 종류
         pas[1] = 170.0f;//시간
         pas[2] = 1.0f;//적 수
+        pas[3] = 1.0f;//남은 웨이브 호출
+        StartCoroutine(EnemyWave(pas));
+
+        pas = new float[4];
+        pas[0] = 6.0f;//Enemy 종류
+        pas[1] = 185.0f;//시간
+        pas[2] = 3.0f;//적 수
+        pas[3] = 5.0f;//남은 웨이브 호출
+        StartCoroutine(EnemyWave(pas));
+
+        pas = new float[4];
+        pas[0] = 5.0f;//Enemy 종류
+        pas[1] = 195.0f;//시간
+        pas[2] = 2.0f;//적 수
         pas[3] = 1.0f;//남은 웨이브 호출
         StartCoroutine(EnemyWave(pas));
 
@@ -164,6 +186,9 @@ public class Environment : MonoBehaviour {
             case 5:
                 Enemy = Resources.Load("Prefabs/Enemy/Boss_Enemy_green") as GameObject;
                 break;
+            case 6:
+                Enemy = Resources.Load("Prefabs/Enemy/Enemy_mom") as GameObject;
+                break;
         }
         
         GameObject[] tempRefs = new GameObject[2];
@@ -175,7 +200,7 @@ public class Environment : MonoBehaviour {
             float temp_x = UnityEngine.Random.Range(-90.0f, 90.0f);
             int sign = UnityEngine.Random.value < .5 ? -1 : 1;
             float temp_z = sign * Mathf.Sqrt(8100.0f - Mathf.Pow(temp_x, 2.0f) ); //원의 방정식, x를 랜덤하게 설정 y는 원의 반지름(90)에 의해 자동으로 결정
-            Vector3 temp = new Vector3(temp_x, 0.3f, temp_z);
+            Vector3 temp = new Vector3(temp_x, 0.1f, temp_z);
 
             Enemy = Instantiate(Enemy, temp, Quaternion.identity);
             EnemyCount++;
@@ -194,6 +219,8 @@ public class Environment : MonoBehaviour {
     public void IncreaseScore(int amount, int type)//점수와 업적
     {
         MissionScore += amount;
+        ui_Manager.IncreaseScoreAni();
+        ui_Manager.DamageAni();
     }
 
     public void IncreaseMoney(int amount)
@@ -214,6 +241,7 @@ public class Environment : MonoBehaviour {
     public void GameEnd()
     {
         SW.Stop();
+        GameOver = true;
         PlayerDrone.GetComponent<Drone>().GameOver = true;
         PlayerDrone.GetComponent<Drone>().DronePowerOn = false;
         PlayerDrone.GetComponent<Drone>().DroneAnimator.enabled = false;
