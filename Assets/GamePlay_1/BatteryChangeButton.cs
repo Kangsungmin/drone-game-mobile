@@ -11,6 +11,7 @@ public class BatteryChangeButton : MonoBehaviour, IPointerDownHandler, IPointerU
     float NeededTime = 20.0f, NeededTime_Max = 20.0f;
     Drone PlayerDrone;
     public Text NeededTimeText;
+    GameObject HumanAni;
 
     void Awake()
     {
@@ -22,6 +23,7 @@ public class BatteryChangeButton : MonoBehaviour, IPointerDownHandler, IPointerU
     public void SetReference(GameObject[] Refs)
     {
         PlayerDrone = Refs[0].GetComponent<Drone>();
+        HumanAni = Refs[1];
     }
 	// Use this for initialization
 	void Start () {
@@ -47,6 +49,7 @@ public class BatteryChangeButton : MonoBehaviour, IPointerDownHandler, IPointerU
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        HumanAni.SendMessage("ChangeBattery");
         pointed = true;
         Process.gameObject.SetActive(true);
         ProcessBG.gameObject.SetActive(true);
@@ -61,6 +64,7 @@ public class BatteryChangeButton : MonoBehaviour, IPointerDownHandler, IPointerU
     public void Initialize()
     {
         pointed = false;
+        HumanAni.SendMessage("ChangeBatteryEnd");
         NeededTime = NeededTime_Max;
         NeededTimeText.text = "20.0";
         Process.gameObject.SetActive(false);

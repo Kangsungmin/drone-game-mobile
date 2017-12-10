@@ -54,8 +54,9 @@ public class UIManager : MonoBehaviour {
         tempRefs[2] = LiftButtonBG;//리프팅 버튼 Ani
         //LiftButton.SendMessage("SetReference", tempRefs);//드론, Claw, GrabModeCtrl
 
-        tempRefs = new GameObject[1];
+        tempRefs = new GameObject[2];
         tempRefs[0] = Refs[0];
+        tempRefs[1] = Refs[1];
         BatteryChangeButton.SendMessage("SetReference", tempRefs);
     }
     
@@ -83,7 +84,7 @@ public class UIManager : MonoBehaviour {
             else MainHPBar.color = new Color32(214, 214, 214, 255);
 
             //MainHuman과 Drone의 거리를 재서 배터리 교체버튼 활성화 여부 결정
-            if (Vector3.Distance(MainHuman.transform.position, Player.transform.position) < 3.0f) BatteryChangeButton.SetActive(true);
+            if (Vector3.Distance(MainHuman.transform.position, Player.transform.position) < 4.5f) BatteryChangeButton.SetActive(true);
             else BatteryChangeButton.SetActive(false);
         }
     }
@@ -125,14 +126,25 @@ public class UIManager : MonoBehaviour {
 
     public void ShopCall()
     {
-        if(ShopPanel.activeSelf) ShopPanel.SetActive(false);
-        else ShopPanel.SetActive(true);
+        if (ShopPanel.activeSelf)
+        {
+            Time.timeScale = 1;
+            environment.SW.Start();
+            ShopPanel.SetActive(false);
+        }
+        else
+        {
+            Time.timeScale = 0;
+            environment.SW.Stop();
+            ShopPanel.SetActive(true);
+        }
 
     }
     public void IncreaseScoreAni()
     {
         ScoreAni.Play("IncreaseScore", 0, 0.0f);
     }
+
     public void DamageAni()
     {
         GameObject temp = Instantiate(Damage, DamageSpawn.position, Quaternion.identity);

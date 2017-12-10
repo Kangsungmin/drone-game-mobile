@@ -89,7 +89,7 @@ public class BeginnerDrone : Drone
             bodyDir.z = -40.0f * moveJoystickLeft.Horizontal();//몸체 좌우 회전
             bodyDir.x = 30.0f * moveJoystickLeft.Vertical();
             bodyDir.y = currentY;
-            bodyDir.y += 3.0f * moveJoystickRight.Horizontal();
+            bodyDir.y += 4.0f * moveJoystickRight.Horizontal();
             transform.eulerAngles = bodyDir;//Drone 오브젝트 좌우 회전 적용
 
             if (flyDelay) StartCoroutine("AddCtrlToDrone", moveJoystickRight.Vertical()); //상하강 버튼을 누를시

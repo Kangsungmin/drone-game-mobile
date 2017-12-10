@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy_kid : Enemy {
-    
-
     private void Awake()
     {
         isDead = false;
@@ -43,6 +41,7 @@ public class Enemy_kid : Enemy {
             case "Idle":
                 break;
             case "Move":
+                nvAgent.speed = Speed;
                 EnemyAnimator.SetInteger("State", 2);
                 //transform.LookAt(Target.transform);
                 //transform.Translate(transform.forward * Speed * Time.deltaTime, Space.World);//보는방향으로 움직인다.
@@ -54,6 +53,7 @@ public class Enemy_kid : Enemy {
                 if (AttackReady) StartCoroutine(Attack());
                 break;
             case "Blocked":
+                nvAgent.enabled = false;
                 //애니메이션은 그대로, 포지션 이동은 하지 않는다.
                 break;
             case "Die":

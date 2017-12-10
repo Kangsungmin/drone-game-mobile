@@ -44,18 +44,20 @@ public class Boss_Enemy_green : Enemy {
             case "Idle":
                 break;
             case "Move":
+                nvAgent.speed = Speed;
                 EnemyAnimator.SetInteger("State", 1);
                 //transform.LookAt(Target.transform);
                 //transform.Translate(transform.forward * Speed * Time.deltaTime, Space.World);//보는방향으로 움직인다.
                 if (Vector3.Distance(transform.position, Target.transform.position) < 7.0f) State = "Attack";
                 break;
             case "Attack":
-                nvAgent.enabled = false;
+                nvAgent.speed = 0;
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
                 if (AttackReady) StartCoroutine(Attack());
                 break;
             case "Blocked":
                 //애니메이션은 그대로, 포지션 이동은 하지 않는다.
+                nvAgent.enabled = false;
                 break;
             case "Die":
                 nvAgent.enabled = false;

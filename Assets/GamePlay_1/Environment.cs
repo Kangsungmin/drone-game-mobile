@@ -13,7 +13,7 @@ public class Environment : MonoBehaviour {
 
     public DroneCamera D_CAM;
     GameObject PlayerDrone, Enemy;
-    public GameObject MainHuman;
+    public GameObject mainHuman;
     //======UI GameObject=======
     public GameObject moveJoystickLeft, moveJoystickRight;
     public UIManager ui_Manager;
@@ -62,8 +62,12 @@ public class Environment : MonoBehaviour {
 
         tempRefs = new GameObject[2];
         tempRefs[0] = PlayerDrone;
-        tempRefs[1] = MainHuman;
+        tempRefs[1] = mainHuman;
         ui_Manager.SendMessage("SetReference", tempRefs);
+
+        tempRefs = new GameObject[1];
+        tempRefs[0] = PlayerDrone;
+        mainHuman.SendMessage("SetReference", tempRefs);
 
 
 
@@ -87,7 +91,7 @@ public class Environment : MonoBehaviour {
         //첫번째 웨이브 보스
         pas = new float[4];
         pas[0] = 4.0f;//Enemy 종류
-        pas[1] = 50.0f;//시간
+        pas[1] = 40.0f;//시간
         pas[2] = 1.0f;//적 수
         pas[3] = 1.0f;//남은 웨이브 호출
         StartCoroutine(EnemyWave(pas));
@@ -153,9 +157,9 @@ public class Environment : MonoBehaviour {
             case EXIT:
                 break;
             case DIE:
-                MainHuman.SendMessage("Die");
-                GameEnd();
+                mainHuman.SendMessage("Die");
                 MainState = EXIT;
+                GameEnd();
                 break;
             case IDLE:
  
@@ -193,14 +197,14 @@ public class Environment : MonoBehaviour {
         
         GameObject[] tempRefs = new GameObject[2];
         tempRefs[0] = gameObject;
-        tempRefs[1] = MainHuman;
+        tempRefs[1] = mainHuman;
         int NumofEnemy = (int) pas[2];
         for (int i = 0; i < NumofEnemy; i++)
         {
             float temp_x = UnityEngine.Random.Range(-90.0f, 90.0f);
             int sign = UnityEngine.Random.value < .5 ? -1 : 1;
             float temp_z = sign * Mathf.Sqrt(8100.0f - Mathf.Pow(temp_x, 2.0f) ); //원의 방정식, x를 랜덤하게 설정 y는 원의 반지름(90)에 의해 자동으로 결정
-            Vector3 temp = new Vector3(temp_x, 0.1f, temp_z);
+            Vector3 temp = new Vector3(temp_x, 0.0f, temp_z);
 
             Enemy = Instantiate(Enemy, temp, Quaternion.identity);
             EnemyCount++;
@@ -241,12 +245,14 @@ public class Environment : MonoBehaviour {
     public void GameEnd()
     {
         SW.Stop();
-        GameOver = true;
+        
         PlayerDrone.GetComponent<Drone>().GameOver = true;
         PlayerDrone.GetComponent<Drone>().DronePowerOn = false;
         PlayerDrone.GetComponent<Drone>().DroneAnimator.enabled = false;
         //서버 통신
+#if (UNITY_ANDROID == true && UNITY_EDITOR == false)
         StartCoroutine(MissionClear_To_DB(MissionScore, NowGetParts));
+#endif
         //UI 표시
         ui_Manager.GameEnd(MissionScore, NowGetParts);
 
@@ -256,8 +262,9 @@ public class Environment : MonoBehaviour {
 
        // if (isSuccess && Social.localUser.authenticated)
         //{
-            ((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(GPGSIds.leaderboard_scoreboard);
-       // }
+        ((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(GPGSIds.leaderboard_scoreboard);
+        // }
+        GameOver = true;
     }
 
     IEnumerator MissionClear_To_DB(int getScore, Dictionary<int, int> getPartID)

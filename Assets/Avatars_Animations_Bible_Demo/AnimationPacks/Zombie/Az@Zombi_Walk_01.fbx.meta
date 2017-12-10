@@ -3,7 +3,7 @@ guid: cc6e8279a50f1cb47b046cc6e4e44d4d
 timeCreated: 1478704663
 licenseType: Store
 ModelImporter:
-  serializedVersion: 22
+  serializedVersion: 21
   fileIDToRecycleName:
     100000: //RootNode
     100002: Extra2_J
@@ -75,12 +75,10 @@ ModelImporter:
     400066: Spine_02_J
     7400000: Zombi_Walk_01
     9500000: //RootNode
-  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -97,7 +95,6 @@ ModelImporter:
       humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    importAnimatedCustomProperties: 1
     animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -119,14 +116,14 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 0
+      keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
-      heightFromFeet: 1
-      mirror: 1
+      heightFromFeet: 0
+      mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []

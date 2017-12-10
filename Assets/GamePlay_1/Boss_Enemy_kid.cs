@@ -12,7 +12,7 @@ public class Boss_Enemy_kid : Enemy
         State = "Move";
         HP = 100.0f;
         Max_HP = 100.0f;
-        Speed = 2.0f;
+        Speed = 2.5f;
         Power = 10.0f;
         money = 100;
         EnemyAnimator = GetComponent<Animator>();
@@ -41,6 +41,7 @@ public class Boss_Enemy_kid : Enemy
             case "Idle":
                 break;
             case "Move":
+                nvAgent.speed = Speed;
                 EnemyAnimator.SetInteger("State", 1);
                 //transform.LookAt(Target.transform);
                 //transform.Translate(transform.forward * Speed * Time.deltaTime, Space.World);//보는방향으로 움직인다.
@@ -48,11 +49,12 @@ public class Boss_Enemy_kid : Enemy
                 if (Vector3.Distance(transform.position, Target.transform.position) < 9.0f) State = "Attack";
                 break;
             case "Attack":
-                nvAgent.enabled = false;
+                nvAgent.speed = 0;
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
                 if (AttackReady) StartCoroutine(Attack());
                 break;
             case "Blocked":
+                nvAgent.speed = 0;
                 //애니메이션은 그대로, 포지션 이동은 하지 않는다.
                 break;
             case "Die":
@@ -139,6 +141,8 @@ public class Boss_Enemy_kid : Enemy
     {
         AniOn = true;
         EnemyAnimator.Play("Zombie Die_01", 0, 0.0f);
+        nvAgent.height = 0.0f;
+        nvAgent.baseOffset = 0.0f;
         yield return new WaitForSeconds(0.18f);
         
         EnemyAnimator.SetInteger("State", 1);
