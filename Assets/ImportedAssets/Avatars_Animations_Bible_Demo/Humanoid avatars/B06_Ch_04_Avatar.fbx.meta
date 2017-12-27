@@ -3,7 +3,7 @@ guid: 7f1972951ac6fc345881da2aa3dc3442
 timeCreated: 1481787384
 licenseType: Store
 ModelImporter:
-  serializedVersion: 21
+  serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     100002: Batch_06
@@ -82,10 +82,17 @@ ModelImporter:
     4300000: Batch_06_Ch_04_Avatar
     9500000: //RootNode
     13700000: Batch_06_Ch_04_Avatar
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Santhosh_pending_rigs_lambert2
+    second: {fileID: 2100000, guid: ff0eeaceb189f8c458fc573cf4a16a3e, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -98,6 +105,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
     animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -110,7 +118,7 @@ ModelImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: 300
-    meshCompression: 0
+    meshCompression: 3
     addColliders: 0
     importVisibility: 0
     importBlendShapes: 1

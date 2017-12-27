@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Timers;
 
@@ -31,7 +32,8 @@ public abstract class Drone : MonoBehaviour {
     protected Rigidbody thisRB;
 
     protected VirtualJS_Left moveJoystickLeft;//조이스틱 객체
-    protected VirtualJS_Right moveJoystickRight;
+    protected Button upButton, downButton;
+    protected SwipeController swipeController;
     public Transform Claw;
     
 
@@ -42,5 +44,5 @@ public abstract class Drone : MonoBehaviour {
     //abstract public void GetItem(GameObject item);
     abstract public void GrabSomthing(GameObject target);
     abstract public void DropSomthing();
-
+    abstract public void AddControll(float val);
 }

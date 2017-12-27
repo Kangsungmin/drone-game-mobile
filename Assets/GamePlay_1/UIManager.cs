@@ -4,12 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Diagnostics;
 using UnityEngine.SceneManagement;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using System;
 
 public class UIManager : MonoBehaviour {
     public Drone Player;
     public Environment environment;
     public GameObject MainHuman;
-    
+    public SwipeController swipeController;
+
+    //========드론 조작 변수=======
+    public float ThrustAddValue = 0.0f;
+    //========드론 조작 변수=======
+
     //========스코어 변수==========
     public Text ScoreText, MoneyText, TimeText, AchivementText, BombCountText;
     public Animator ScoreAni, AchiveAni;
@@ -19,7 +27,10 @@ public class UIManager : MonoBehaviour {
     //========스코어 변수==========
 
     //========게임종료 변수===========
-    public Text ResultScore, ResultTime;
+    public Action<bool> isSetScore;
+    bool isSuccess;
+    public Text ResultScoreView, ResultTime;
+    public long ResultScore;
     //========게임종료 변수===========
 
     //========랜덤 장애물아이템 변수============
@@ -32,6 +43,11 @@ public class UIManager : MonoBehaviour {
     };
     //========랜덤 장애물아이템 변수============
 
+    //========사운드 변수============
+    public AudioSource _audio;
+    public AudioClip itemOpenSound, drinkSound;
+    //========사운드 변수============
+
     public GameObject GameEndPanel, ShopPanel, MissionPanelButtons, PauseMenu, GaugeUI, LiftButtonBG, LiftButton, BatteryChangeButton;
     public Image LeftJoystick, RightJoystick, FuelBar, MainHPBar;
     public GameObject LiftButtonAni;
@@ -39,6 +55,11 @@ public class UIManager : MonoBehaviour {
 
     private void Awake()
     {
+        isSetScore = ((bool updatescore) =>
+        {
+            isSuccess = updatescore;
+        });
+        _audio = GetComponent<AudioSource>();
         BatteryChangeButton.SetActive(false);
         environment = GameObject.Find("ENVIRONMENT").GetComponent<Environment>();
     }
@@ -58,6 +79,9 @@ public class UIManager : MonoBehaviour {
         tempRefs[0] = Refs[0];
         tempRefs[1] = Refs[1];
         BatteryChangeButton.SendMessage("SetReference", tempRefs);
+
+        swipeController.SetReference(tempRefs);
+
     }
     
 
@@ -66,6 +90,10 @@ public class UIManager : MonoBehaviour {
     {
         if (!Environment.GameOver)
         {
+            //추력버튼 입력에 따른 값 드론에 전달
+            
+            Player.AddControll(ThrustAddValue);
+
             ScoreText.text = environment.MissionScore.ToString();
             MoneyText.text = environment.AmountMoney.ToString();
             BombCountText.text = "X "+environment.LeftBombCount.ToString();
@@ -86,6 +114,8 @@ public class UIManager : MonoBehaviour {
             //MainHuman과 Drone의 거리를 재서 배터리 교체버튼 활성화 여부 결정
             if (Vector3.Distance(MainHuman.transform.position, Player.transform.position) < 4.5f) BatteryChangeButton.SetActive(true);
             else BatteryChangeButton.SetActive(false);
+            
+            if(Input.GetKeyDown(KeyCode.Space)) {Fire();}
         }
     }
     
@@ -96,10 +126,16 @@ public class UIManager : MonoBehaviour {
         {
 
             case "Drink":
-                if (environment.AmountMoney >= 70)
+                if (environment.AmountMoney >= 70 && environment.Main_HP < 100.0f)
                 {
                     environment.AmountMoney -= 70;
-                    environment.Main_HP += 20.0f;
+                    //음료 마시는 소리
+                    _audio.clip = drinkSound;
+                    _audio.Play();
+                    if (environment.Main_HP > 80.0f)
+                        environment.Main_HP = 100.0f;
+                    else 
+                        environment.Main_HP += 20.0f;
                 }
                 break;
             case "Barrier":
@@ -107,8 +143,15 @@ public class UIManager : MonoBehaviour {
                 {
                     environment.AmountMoney -= 50;
 
-                    Barrier temp = (Barrier) Random.Range(0, (int) Barrier.NumOfBarriers);//랜덤하게 장애물 변환
+                    Barrier temp = (Barrier) UnityEngine.Random.Range(0, (int) Barrier.NumOfBarriers);//랜덤하게 장애물 변환
                     Player.SendMessage("SpawnItem", temp.ToString());
+                }
+                break;
+            case "Missle":
+                if (environment.AmountMoney >= 200)
+                {
+                    environment.AmountMoney -= 200;
+                    environment.LeftBombCount += 15;
                 }
                 break;
         }
@@ -126,16 +169,18 @@ public class UIManager : MonoBehaviour {
 
     public void ShopCall()
     {
+        _audio.clip = itemOpenSound;
+        _audio.Play();
         if (ShopPanel.activeSelf)
         {
-            Time.timeScale = 1;
-            environment.SW.Start();
+            //Time.timeScale = 1;
+            //environment.SW.Start();
             ShopPanel.SetActive(false);
         }
         else
         {
-            Time.timeScale = 0;
-            environment.SW.Stop();
+            //Time.timeScale = 0;
+            //environment.SW.Stop();
             ShopPanel.SetActive(true);
         }
 
@@ -147,9 +192,11 @@ public class UIManager : MonoBehaviour {
 
     public void DamageAni()
     {
+        
         GameObject temp = Instantiate(Damage, DamageSpawn.position, Quaternion.identity);
         temp.transform.SetParent(DamageSpawn);
-        temp.GetComponent<Animator>().SetInteger("value",Random.Range(1,4));
+        temp.GetComponent<Animator>().SetInteger("value", UnityEngine.Random.Range(1,4));
+        
     }
     
 
@@ -174,10 +221,17 @@ public class UIManager : MonoBehaviour {
 
     public void GameEnd(int getScore, Dictionary<int, int> getPartID)
     {
-        
         GameEndPanel.SetActive(true);
-        ResultScore.text = getScore.ToString();
+        ResultScore = (long)getScore;
+        ResultScoreView.text = ResultScore.ToString();
         ResultTime.text = TimeCount;
+    }
+
+    public void GoLeaderBoard()
+    {
+        PlayGamesPlatform.Activate();
+        
+        ((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(GPGSIds.leaderboard_scoreboard);
     }
 
     public void ExitGamePlay()

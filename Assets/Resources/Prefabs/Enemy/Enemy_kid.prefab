@@ -668,7 +668,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1938758752472732}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.68538, y: -3.307763e-17, z: 44.69052}
+  m_LocalPosition: {x: 9.787343, y: -6.457849e-18, z: 8.725069}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4518893087568440}
@@ -1307,8 +1307,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.2961494, y: 2.9593587, z: 1.3936661}
-  m_Center: {x: 0, y: 1.7164524, z: 0}
+  m_Size: {x: 1.9414229, y: 2.9593587, z: 2.0168538}
+  m_Center: {x: 0, y: 1.7164524, z: 0.31159377}
 --- !u!65 &65788464352342190
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -1349,9 +1349,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a67f177d8e1e6042a4fb87285dda532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDead: 0
+  AttackReady: 1
   State: Idle
   EnemyAnimator: {fileID: 0}
   boxcoll: {fileID: 65688635183742204}
+  getHitSound: {fileID: 8300000, guid: a088e31bf4ab23c4cbd4f390d5d4e981, type: 3}
+  attackSound: {fileID: 8300000, guid: c636ab57cf572cb4cb4a41856a719bf7, type: 3}
+  dieSound: {fileID: 8300000, guid: 19c49b8e7fbd0b14195258a00b71dba4, type: 3}
 --- !u!135 &135944381658366062
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -1477,6 +1482,7 @@ SkinnedMeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1492,6 +1498,7 @@ SkinnedMeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5

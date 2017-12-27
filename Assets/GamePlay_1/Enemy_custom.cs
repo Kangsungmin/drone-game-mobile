@@ -8,17 +8,22 @@ public class Enemy_custom : Enemy {
     public int Custom_Money;
 
 
-private void Awake()
-{
-    isDead = false;
-    State = "Move";
-    HP = Custom_Max_HP;
-    Max_HP = Custom_Max_HP;
-    Speed = Custom_Speed;
-    Power = Custom_Power;
-    money = Custom_Money;
-    EnemyAnimator = GetComponent<Animator>();
-}
+    private void Awake()
+    {
+        _audio = gameObject.AddComponent<AudioSource>();
+        _audio.playOnAwake = false;
+        _audio.loop = false;
+        _audio.clip = getHitSound;
+
+        isDead = false;
+        State = "Move";
+        HP = Custom_Max_HP;
+        Max_HP = Custom_Max_HP;
+        Speed = Custom_Speed;
+        Power = Custom_Power;
+        money = Custom_Money;
+        EnemyAnimator = GetComponent<Animator>();
+    }
 public void SetReference(GameObject[] Refs)
 {
     environment = Refs[0].GetComponent<Environment>();
@@ -56,10 +61,15 @@ void Update()
         case "Attack":
                 nvAgent.speed = 0;
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
-                if (AttackReady) StartCoroutine(Attack());
-            break;
+                if (AttackReady)
+                {
+                    _audio.clip = attackSound;
+                    _audio.Play();
+                    StartCoroutine(Attack());
+                }
+                break;
         case "Blocked":
-                nvAgent.enabled = false;
+                nvAgent.speed = 0;
                 //애니메이션은 그대로, 포지션 이동은 하지 않는다.
                 break;
         case "Die":
@@ -93,10 +103,10 @@ private void OnTriggerStay(Collider other)
 
 public void Damaged(float amount)
 {
-
-    HP -= amount;
-    environment.IncreaseScore((int)amount, 0);
-    if (HP <= 0.0f)
+        float getScore = 0.0f;
+        getScore = (amount > HP) ? HP : amount;
+        environment.IncreaseScore((int)getScore, 0);
+        if (HP <= 0.0f)
     {
         isDead = true;
         environment.IncreaseMoney(money);
@@ -119,7 +129,11 @@ IEnumerator Blocked()
 
 private void Dead()
 {
-    State = "Exit";
+        _audio.volume = 0.4f;
+        _audio.Play();
+
+        State = "Exit";
+
     isDead = true;
     EnemyAnimator.enabled = false;
     boxcoll.enabled = false;

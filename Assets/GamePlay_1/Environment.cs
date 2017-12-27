@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-using System.Diagnostics;
 using UnityEngine.SceneManagement;
+using System.Diagnostics;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using System;
 
 
 public class Environment : MonoBehaviour {
@@ -15,14 +15,15 @@ public class Environment : MonoBehaviour {
     GameObject PlayerDrone, Enemy;
     public GameObject mainHuman;
     //======UI GameObject=======
-    public GameObject moveJoystickLeft, moveJoystickRight;
+    public GameObject moveJoystickLeft, swipeControllor, upButton, downButton;
     public UIManager ui_Manager;
+    public MarkGenerator MarkManager;
     //======UI GameObject=======
 
     //======Env variable========
     public static bool GameOver = false;
     public static int EnemyCount = 0;
-    public int LeftBombCount = 5;
+    public int LeftBombCount = 10;
     //======Env variable========
     //======Main Human Variable=======
     private int MainState = IDLE;
@@ -38,12 +39,19 @@ public class Environment : MonoBehaviour {
     public Action<bool> isSetScore;
     bool isSuccess;
 
+
     private void Awake()
     {
+        isSetScore = ((bool updatescore) =>
+        {
+            isSuccess = updatescore;
+        });
+
         GameOver = false;
         //현재 기기가 모바일 일때,
         //플레이어데이터매니저에 값이 없다면 다시 Init씬으로 간다.
         //모바일이 아닐때는 그냥 실행
+        
 #if (UNITY_ANDROID == true && UNITY_EDITOR == false)
         if (PlayerDataManager.userID == null) SceneManager.LoadScene("InitScene");
 #endif
@@ -53,12 +61,13 @@ public class Environment : MonoBehaviour {
         if (PlayerDataManager.nowUsingModel != null) PlayerDrone = Resources.Load("Prefabs/Drones/Drone_" + PlayerDataManager.nowUsingModel.getTitle()) as GameObject;
         else PlayerDrone = Resources.Load("Prefabs/Drones/Drone_Beginner") as GameObject;
         PlayerDrone = Instantiate(PlayerDrone, DroneSpawn.position, DroneSpawn.localRotation);
-        GameObject[] tempRefs = new GameObject[4];//Env, UI, 조이스틱L,R
+        GameObject[] tempRefs = new GameObject[6];//Env, UI, 조이스틱L,R
         tempRefs[0] = gameObject;
         tempRefs[1] = ui_Manager.gameObject;
         tempRefs[2] = moveJoystickLeft;
-        tempRefs[3] = moveJoystickRight;
+        tempRefs[3] = swipeControllor;
         PlayerDrone.SendMessage("SetReference", tempRefs);//파라미터 : 게임오브젝트배열
+        MarkManager.DroneGened(PlayerDrone);
 
         tempRefs = new GameObject[2];
         tempRefs[0] = PlayerDrone;
@@ -120,16 +129,16 @@ public class Environment : MonoBehaviour {
         StartCoroutine(EnemyWave(pas));
 
         pas = new float[4];
-        pas[0] = 6.0f;//Enemy 종류
+        pas[0] = 4.0f;//Enemy 종류
         pas[1] = 185.0f;//시간
-        pas[2] = 3.0f;//적 수
-        pas[3] = 5.0f;//남은 웨이브 호출
+        pas[2] = 2.0f;//적 수
+        pas[3] = 2.0f;//남은 웨이브 호출
         StartCoroutine(EnemyWave(pas));
 
         pas = new float[4];
-        pas[0] = 5.0f;//Enemy 종류
+        pas[0] = 5.0f;//Enemy 종류 녹색 괴물
         pas[1] = 195.0f;//시간
-        pas[2] = 2.0f;//적 수
+        pas[2] = 1.0f;//적 수
         pas[3] = 1.0f;//남은 웨이브 호출
         StartCoroutine(EnemyWave(pas));
 
@@ -141,10 +150,7 @@ public class Environment : MonoBehaviour {
     }
     // Use this for initialization
     void Start() {
-        isSetScore = ((bool updatescore) =>
-        {
-            isSuccess = updatescore;
-        });
+
         SW.Start();
     }
 
@@ -209,6 +215,7 @@ public class Environment : MonoBehaviour {
             Enemy = Instantiate(Enemy, temp, Quaternion.identity);
             EnemyCount++;
             Enemy.SendMessage("SetReference", tempRefs);
+            MarkManager.EnmeyGened(Enemy);
         }
         pas[1] = 15.0f;
         pas[2] += 2;
@@ -257,13 +264,9 @@ public class Environment : MonoBehaviour {
         ui_Manager.GameEnd(MissionScore, NowGetParts);
 
         PlayGamesPlatform.Activate();
+        Social.Active.ReportScore(MissionScore, GPGSIds.leaderboard_scoreboard, isSetScore);
 
-        Social.Active.ReportScore((long)MissionScore, GPGSIds.leaderboard_scoreboard, isSetScore);
 
-       // if (isSuccess && Social.localUser.authenticated)
-        //{
-        ((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(GPGSIds.leaderboard_scoreboard);
-        // }
         GameOver = true;
     }
 

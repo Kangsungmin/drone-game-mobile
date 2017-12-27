@@ -50,15 +50,6 @@ public class Redwing : Drone
         //*초기 비행 시에만 동작한다.
         ////추력을 사용자가 위로 올리기 시작하면 시동이 켜진다.
         //<<05.26수정>>
-        if (!droneStarting)
-        {
-            if (moveJoystickRight.Vertical() > 0.0f)
-            {
-                DronePowerOn = true;
-                droneStarting = true;
-            }
-
-        }
         //=============================드론 시동[끝]===============================
 
         //=============================드론 조작[시작]=============================
@@ -73,15 +64,15 @@ public class Redwing : Drone
             bodyDir.y = currentY;
 
             transform.eulerAngles = bodyDir;//Drone 오브젝트 좌우 회전 적용
-            if ((moveJoystickLeft.Vertical() != 0.0f) || (moveJoystickRight.Vertical() != 0.0f)) ; //Arming.AttackMode = false;
+            if ((moveJoystickLeft.Vertical() != 0.0f)) ; //Arming.AttackMode = false;
 
             //좌측 조이스틱에 따른 날개 회전 애니메이션은 DroneAnim스크립트에서 처리한다.
-            if (flyDelay) StartCoroutine("AddCtrlToDrone", moveJoystickRight.Vertical()); //상하강 버튼을 누를시
+            //if (flyDelay) StartCoroutine("AddCtrlToDrone", moveJoystickRight.Vertical()); //상하강 버튼을 누를시
             if (fuelDelay) StartCoroutine("fuelControl");
             //초당 힘을 가하도록 한다.
 
             //애니메이션
-            if (moveJoystickLeft.Horizontal() + moveJoystickLeft.Vertical() + moveJoystickRight.Vertical() != 0.0f) AnimatorState = false;
+            if (moveJoystickLeft.Horizontal() + moveJoystickLeft.Vertical() != 0.0f) AnimatorState = false;
             else AnimatorState = true;
         }
         //=============================드론 조작[끝]===============================
@@ -257,6 +248,13 @@ public class Redwing : Drone
         fuelDelay = true;
     }
     //=============================드론 연료함수[끝]===============================
+
+    public override void AddControll(float val)
+    {
+        if (flyDelay) StartCoroutine("AddCtrlToDrone", val);
+    }
+
+
 
     //=============================연료 충전함수[시작]=============================
     public override void getFuel()

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using UnityEngine.Advertisements;
 
 public class Menu : MonoBehaviour
 {
@@ -20,12 +21,17 @@ public class Menu : MonoBehaviour
     public Action<bool> isSetScore;
     bool isSuccess;
 
+    public Button _BtnUnityAds;
+    ShowOptions _ShowOpt = new ShowOptions();
+
     void Awake()
     {
         isSetScore = result => isSuccess = result;
 
         Screen.SetResolution(1280, 800, true);
-
+        UpdateButton();
+        Advertisement.Initialize("1560964", true);
+        _ShowOpt.resultCallback = OnAdsShowResultCallBack;
     }
 
     void Start()
@@ -41,29 +47,43 @@ public class Menu : MonoBehaviour
         {
             Update_Spanner();
         }
-
-        //AudioSource.PlayClipAtPoint(backMusic,transform.position);
-        //화면 사이즈 적용
-
         Time.timeScale = 1;
-        //Path.text = Application.dataPath;
-        // Debug.Log("플레이어 레벨 : " + PlayerDataManager.level);
-        // Debug.Log("경험치 : " + PlayerDataManager.exp);
-        // Debug.Log("돈 : "+ PlayerDataManager.money);
     }
-
+    
     public void Update()
     {
         MoneyView.text = PlayerDataManager.money.ToString();
         LevelView.text = PlayerDataManager.level.ToString();
         NicknameView.text = PlayerDataManager.gameID;
         SpannerView.text = PlayerDataManager.spanner.ToString() + "/10";
+        UpdateButton();
     }
+
+    void UpdateButton()
+    {
+        _BtnUnityAds.interactable = Advertisement.IsReady();
+        _BtnUnityAds.GetComponentInChildren<Text>().text
+            = "광고보고 스패너 충전하기";
+    }
+
+    public void OnBtnUnityAds() //버튼에 삽입
+    {
+        Debug.Log("광고클릭");
+        Advertisement.Show(null, _ShowOpt);
+    }
+
+    void OnAdsShowResultCallBack(ShowResult result) //광고이후 호출
+    {
+        if (result == ShowResult.Finished)
+        {
+            StartCoroutine(Update_Spanner_DB(PlayerDataManager.spanner + 1));
+        }
+    }
+
     public void SingleplayBtn()
     {
         //Invoke("startGame", .1f);
         //LevelMenu.SetActive(true);
-
     }
     public void SingleplayExit()
     {
@@ -144,6 +164,7 @@ public class Menu : MonoBehaviour
 
 
     }
+
 
     IEnumerator Update_Spanner_DB(int spanner_num)
     {

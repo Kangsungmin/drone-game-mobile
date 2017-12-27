@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public abstract class Enemy : MonoBehaviour {
-    protected bool isDead = false, AttackReady = true;
+    public bool isDead = false, AttackReady = true;
     public string State = "Idle";
     public Animator EnemyAnimator;
     public BoxCollider boxcoll;
@@ -17,4 +17,7 @@ public abstract class Enemy : MonoBehaviour {
     protected Transform myTransform;
     protected Transform playerTransform;
     protected NavMeshAgent nvAgent;
+
+    protected AudioSource _audio;
+    public AudioClip getHitSound, attackSound, dieSound;
 }

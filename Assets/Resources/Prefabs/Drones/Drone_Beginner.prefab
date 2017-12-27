@@ -702,8 +702,8 @@ MonoBehaviour:
   AnimatorState: 0
   flyDelay: 1
   fuelDelay: 1
-  droneStarting: 0
-  DronePowerOn: 0
+  droneStarting: 1
+  DronePowerOn: 1
   GameOver: 0
   Speed: 0
   Fuel: 100

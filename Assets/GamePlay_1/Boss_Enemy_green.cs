@@ -9,11 +9,11 @@ public class Boss_Enemy_green : Enemy {
     {
         isDead = false;
         State = "Move";
-        HP = 200.0f;
-        Max_HP = 200.0f;
+        HP = 400.0f;
+        Max_HP = 400.0f;
         Speed = 5.0f;
         Power = 5.0f;
-        money = 250;
+        money = 200;
         EnemyAnimator = GetComponent<Animator>();
     }
     public void SetReference(GameObject[] Refs)
@@ -57,7 +57,7 @@ public class Boss_Enemy_green : Enemy {
                 break;
             case "Blocked":
                 //애니메이션은 그대로, 포지션 이동은 하지 않는다.
-                nvAgent.enabled = false;
+                nvAgent.speed = 0;
                 break;
             case "Die":
                 nvAgent.enabled = false;
@@ -82,7 +82,7 @@ public class Boss_Enemy_green : Enemy {
             {
                 if (!State.Equals("Blocked"))
                 {
-                    StartCoroutine(Blocked());
+                    StartCoroutine(Blocked((float)other.GetComponent<Rigidbody>().velocity.magnitude));
                 }
 
             }
@@ -91,8 +91,11 @@ public class Boss_Enemy_green : Enemy {
 
     private void Damaged(float amount)
     {
+        float getScore = 0.0f;
+        getScore = (amount > HP) ? HP :  amount;
+        environment.IncreaseScore((int)getScore, 0);
+
         HP -= amount;
-        environment.IncreaseScore((int)amount, 0);
         if (HP <= 0.0f)
         {
             isDead = true;
@@ -101,10 +104,13 @@ public class Boss_Enemy_green : Enemy {
         }
     }
 
-    IEnumerator Blocked()
+    IEnumerator Blocked(float speed)
     {
         State = "Blocked";
-        Damaged(1.0f);
+
+        if (speed > 2.0f)
+            Damaged(1.0f);
+
         nvAgent.updatePosition = false;
         environment.IncreaseScore(1, 0);
         yield return new WaitForSeconds(0.5f);

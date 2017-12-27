@@ -8,10 +8,15 @@ public class Boss_Enemy_kid : Enemy
     bool AniOn;
     private void Awake()
     {
+        _audio = gameObject.AddComponent<AudioSource>();
+        _audio.playOnAwake = false;
+        _audio.loop = false;
+        _audio.clip = getHitSound;
+
         isDead = false;
         State = "Move";
-        HP = 100.0f;
-        Max_HP = 100.0f;
+        HP = 200.0f;
+        Max_HP = 200.0f;
         Speed = 2.5f;
         Power = 10.0f;
         money = 100;
@@ -51,7 +56,12 @@ public class Boss_Enemy_kid : Enemy
             case "Attack":
                 nvAgent.speed = 0;
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
-                if (AttackReady) StartCoroutine(Attack());
+                if (AttackReady)
+                {
+                    _audio.clip = attackSound;
+                    _audio.Play();
+                    StartCoroutine(Attack());
+                }
                 break;
             case "Blocked":
                 nvAgent.speed = 0;
@@ -80,7 +90,7 @@ public class Boss_Enemy_kid : Enemy
             {
                 if (!State.Equals("Blocked"))
                 {
-                    StartCoroutine(Blocked());
+                    StartCoroutine(Blocked((float)other.GetComponent<Rigidbody>().velocity.magnitude));
                 }
             }
         }
@@ -88,9 +98,11 @@ public class Boss_Enemy_kid : Enemy
 
     private void Damaged(float amount)
     {
-        
+        float getScore = 0.0f;
+        getScore = (amount > HP) ? HP : amount;
+        environment.IncreaseScore((int)getScore, 0);
+
         HP -= amount;
-        environment.IncreaseScore((int)amount, 0);
         if (HP <= 0.0f)
         {
             isDead = true;
@@ -100,10 +112,13 @@ public class Boss_Enemy_kid : Enemy
         else if(!AniOn) StartCoroutine(GetHitMotion());
     }
 
-    IEnumerator Blocked()
+    IEnumerator Blocked(float speed)
     {
         State = "Blocked";
-        Damaged(1.0f);
+
+        if (speed > 2.0f)
+            Damaged(1.0f);
+
         nvAgent.updatePosition = false;
         environment.IncreaseScore(1, 0);
         yield return new WaitForSeconds(0.5f);
@@ -114,6 +129,10 @@ public class Boss_Enemy_kid : Enemy
 
     private void Dead()
     {
+        _audio.clip = dieSound;
+        _audio.volume = 0.4f;
+        _audio.Play();
+
         isDead = true;
         EnemyAnimator.enabled = false;
         boxcoll.enabled = false;

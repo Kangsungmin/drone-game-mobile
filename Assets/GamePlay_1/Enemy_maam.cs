@@ -8,10 +8,15 @@ public class Enemy_maam : Enemy {
 
     private void Awake()
     {
+        _audio = gameObject.AddComponent<AudioSource>();
+        _audio.playOnAwake = false;
+        _audio.loop = false;
+        _audio.clip = getHitSound;
+
         isDead = false;
         State = "Move";
-        HP = 8.0f;
-        Max_HP = 8.0f;
+        HP = 45.0f;
+        Max_HP = 45.0f;
         Speed = 4.0f;
         Power = 2.0f;
         money = 10;
@@ -54,10 +59,15 @@ public class Enemy_maam : Enemy {
             case "Attack":
                 nvAgent.speed = 0;
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
-                if (AttackReady) StartCoroutine(Attack());
+                if (AttackReady)
+                {
+                    _audio.clip = attackSound;
+                    _audio.Play();
+                    StartCoroutine(Attack());
+                }
                 break;
             case "Blocked":
-                nvAgent.enabled = false;
+                nvAgent.speed = 0;
                 //애니메이션은 그대로, 포지션 이동은 하지 않는다.
                 break;
             case "Die":
@@ -83,7 +93,7 @@ public class Enemy_maam : Enemy {
             {
                 if (!State.Equals("Blocked"))
                 {
-                    StartCoroutine(Blocked());
+                    StartCoroutine(Blocked((float)other.GetComponent<Rigidbody>().velocity.magnitude));
                 }
 
             }
@@ -92,8 +102,10 @@ public class Enemy_maam : Enemy {
 
     private void Damaged(float amount)
     {
+        float getScore = 0.0f;
+        getScore = (amount > HP) ? HP : amount;
+        environment.IncreaseScore((int)getScore, 0);
         HP -= amount;
-        environment.IncreaseScore((int)amount, 0);
         if (HP <= 0.0f)
         {
             isDead = true;
@@ -102,10 +114,13 @@ public class Enemy_maam : Enemy {
         }
     }
 
-    IEnumerator Blocked()
+    IEnumerator Blocked(float speed)
     {
         State = "Blocked";
-        Damaged(1.0f);
+
+        if (speed > 2.0f)
+            Damaged(1.0f);
+
         nvAgent.updatePosition = false;
         environment.IncreaseScore(1, 0);
         yield return new WaitForSeconds(0.5f);
@@ -116,6 +131,10 @@ public class Enemy_maam : Enemy {
 
     private void Dead()
     {
+        _audio.clip = dieSound;
+        _audio.volume = 0.4f;
+        _audio.Play();
+
         isDead = true;
         EnemyAnimator.enabled = false;
         boxcoll.enabled = false;

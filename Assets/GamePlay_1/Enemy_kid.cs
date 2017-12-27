@@ -6,6 +6,11 @@ using UnityEngine.AI;
 public class Enemy_kid : Enemy {
     private void Awake()
     {
+        _audio = gameObject.AddComponent<AudioSource>();
+        _audio.playOnAwake = false;
+        _audio.loop = false;
+        _audio.clip = getHitSound;
+        
         isDead = false;
         State = "Move";
         HP = 5.0f;
@@ -29,11 +34,6 @@ public class Enemy_kid : Enemy {
         nvAgent.destination = playerTransform.position;
         // --------------
     }
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
 	// Update is called once per frame
 	void Update () {
         switch (State)
@@ -48,12 +48,17 @@ public class Enemy_kid : Enemy {
                 if (Vector3.Distance(transform.position, Target.transform.position) < 5.0f) State = "Attack";
                 break;
             case "Attack":
-                nvAgent.enabled = false;
+                nvAgent.speed = 0;
                 //environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
-                if (AttackReady) StartCoroutine(Attack());
+                if (AttackReady)
+                {
+                    _audio.clip = attackSound;
+                    _audio.Play();
+                    StartCoroutine(Attack());
+                }
                 break;
             case "Blocked":
-                nvAgent.enabled = false;
+                nvAgent.speed = 0;
                 //애니메이션은 그대로, 포지션 이동은 하지 않는다.
                 break;
             case "Die":
@@ -78,7 +83,7 @@ public class Enemy_kid : Enemy {
             {
                 if (!State.Equals("Blocked"))
                 {
-                    StartCoroutine(Blocked());
+                    StartCoroutine(Blocked((float)other.GetComponent<Rigidbody>().velocity.magnitude));
                 }
                 
             }
@@ -87,9 +92,12 @@ public class Enemy_kid : Enemy {
 
     public void Damaged(float amount)
     {
-        
+        //_audio.Play();
+        float getScore = 0.0f;
+        getScore = (amount > HP) ? HP : amount;
+        environment.IncreaseScore((int)getScore, 0);
+
         HP -= amount;
-        environment.IncreaseScore((int)amount, 0);
         if (HP <= 0.0f)
         {
             isDead = true;
@@ -98,12 +106,14 @@ public class Enemy_kid : Enemy {
         }
     }
 
-    IEnumerator Blocked()
+    IEnumerator Blocked(float speed)
     {
         State = "Blocked";
-        Damaged(1.0f);
+
+        if (speed > 2.0f)
+            Damaged(1.0f);
+
         nvAgent.updatePosition = false;
-        environment.IncreaseScore(1, 0);
         yield return new WaitForSeconds(0.5f);
         if(!isDead)
             State = "Move";
@@ -113,6 +123,10 @@ public class Enemy_kid : Enemy {
 
     private void Dead()
     {
+        _audio.clip = dieSound;
+        _audio.volume = 0.4f;
+        _audio.Play();
+        //StartCoroutine(DieSoundDelay());
         State = "Exit";
         isDead = true;
         EnemyAnimator.enabled = false;
@@ -125,7 +139,7 @@ public class Enemy_kid : Enemy {
     {
         AttackReady = false;
         //공격 모션
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
         environment.SendMessage("AttackMain", Power);//메인주인공 공격 알림
         AttackReady = true;
     }

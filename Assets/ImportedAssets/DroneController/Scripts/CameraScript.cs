@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.VR;
+using UnityEngine.XR;
 
 public class CameraScript : MonoBehaviour {
 	[HideInInspector] public GameObject[] dronesToControl; //used to pick  between more drones in one scene

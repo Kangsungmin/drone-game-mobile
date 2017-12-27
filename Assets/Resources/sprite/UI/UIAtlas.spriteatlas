@@ -8,18 +8,20 @@ SpriteAtlas:
   m_Name: UIAtlas
   m_EditorData:
     textureSettings:
+      serializedVersion: 2
       anisoLevel: 1
       compressionQuality: 50
       maxTextureSize: 2048
       textureCompression: 0
-      colorSpace: 1
       filterMode: 1
       generateMipMaps: 0
-      readable: 0
+      readable: 1
       crunchedCompression: 0
+      sRGB: 0
     platformSettings:
     - m_BuildTarget: Android
       m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
       m_TextureFormat: 4
       m_TextureCompression: 1
       m_CompressionQuality: 50
@@ -27,39 +29,48 @@ SpriteAtlas:
       m_AllowsAlphaSplitting: 0
       m_Overridden: 1
     packingParameters:
-      paddingPower: 2
+      serializedVersion: 2
+      padding: 4
       blockOffset: 1
       allowAlphaSplitting: 0
       enableRotation: 1
-      enableTightPacking: 1
+      enableTightPacking: 0
     packedHash:
       serializedVersion: 2
-      Hash: 952c69e6c5f366935cb8a1c215af1acb
+      Hash: b42b3fba3441ae35d8b8082e30b0d1fa
     variantMultiplier: 1
     bindAsDefault: 1
     finalFormat: 4
-    hashString: 952c69e6c5f366935cb8a1c215af1acb
-    totalSpriteSurfaceArea: 866125
+    hashString: b42b3fba3441ae35d8b8082e30b0d1fa
+    totalSpriteSurfaceArea: 1095766
     packables:
-    - {fileID: 21300000, guid: 5cb55680eea65a5468acce72fbf8bf89, type: 3}
+    - {fileID: 21300000, guid: 7e4ab469089b2144a9e35296ec2f6ddf, type: 3}
     - {fileID: 21300000, guid: 6a7c51e6810a70349a346fbb67aa42ab, type: 3}
     - {fileID: 21300000, guid: 67a9791792748984e97624227a3ca411, type: 3}
     - {fileID: 21300000, guid: 67a9791792748984e97624227a3ca411, type: 3}
-    - {fileID: 21300000, guid: 14e96ad3d581fd64682e699ff079eec0, type: 3}
+    - {fileID: 21300000, guid: 8b2b74ccb5840f34e80e21dfc406eb3d, type: 3}
     - {fileID: 21300000, guid: 0b151eebacea19844a7f9eea4c2da58b, type: 3}
     - {fileID: 21300000, guid: 471cd9da5ac2bf64abed895686d31cfa, type: 3}
     - {fileID: 21300000, guid: 2df9468d40de5824881d213cd2a0d296, type: 3}
     - {fileID: 21300000, guid: b19aaaef2373dfd46ab1120a18eb5144, type: 3}
     - {fileID: 21300000, guid: c4eeab3bdcfe7074d9f92731e6bd3224, type: 3}
     - {fileID: 21300000, guid: 68e18b5583875504b8091d351d708776, type: 3}
+    - {fileID: 21300000, guid: be5c2ab048cba984c895ee6806f336e4, type: 3}
+    - {fileID: 21300000, guid: 3789ea581f5845149adc478ea1386771, type: 3}
+    - {fileID: 21300000, guid: 0326b6684cd148b439c552fe5f988449, type: 3}
+    - {fileID: 21300000, guid: ffb388220f96d1b479bec7f0f71a3165, type: 3}
     packedSpriteRenderDataKeys:
     - 2df9468d40de5824881d213cd2a0d296: 21300000
     - 0b151eebacea19844a7f9eea4c2da58b: 21300000
-    - 14e96ad3d581fd64682e699ff079eec0: 21300000
+    - be5c2ab048cba984c895ee6806f336e4: 21300000
+    - 0326b6684cd148b439c552fe5f988449: 21300000
+    - ffb388220f96d1b479bec7f0f71a3165: 21300000
     - 6a7c51e6810a70349a346fbb67aa42ab: 21300000
+    - 3789ea581f5845149adc478ea1386771: 21300000
     - 471cd9da5ac2bf64abed895686d31cfa: 21300000
     - 68e18b5583875504b8091d351d708776: 21300000
-    - 5cb55680eea65a5468acce72fbf8bf89: 21300000
+    - 7e4ab469089b2144a9e35296ec2f6ddf: 21300000
+    - 8b2b74ccb5840f34e80e21dfc406eb3d: 21300000
     - b19aaaef2373dfd46ab1120a18eb5144: 21300000
     - 67a9791792748984e97624227a3ca411: 21300000
     - c4eeab3bdcfe7074d9f92731e6bd3224: 21300000
@@ -67,22 +78,30 @@ SpriteAtlas:
   m_PackedSprites:
   - {fileID: 21300000, guid: 2df9468d40de5824881d213cd2a0d296, type: 3}
   - {fileID: 21300000, guid: 0b151eebacea19844a7f9eea4c2da58b, type: 3}
-  - {fileID: 21300000, guid: 14e96ad3d581fd64682e699ff079eec0, type: 3}
+  - {fileID: 21300000, guid: be5c2ab048cba984c895ee6806f336e4, type: 3}
+  - {fileID: 21300000, guid: 0326b6684cd148b439c552fe5f988449, type: 3}
+  - {fileID: 21300000, guid: ffb388220f96d1b479bec7f0f71a3165, type: 3}
   - {fileID: 21300000, guid: 6a7c51e6810a70349a346fbb67aa42ab, type: 3}
+  - {fileID: 21300000, guid: 3789ea581f5845149adc478ea1386771, type: 3}
   - {fileID: 21300000, guid: 471cd9da5ac2bf64abed895686d31cfa, type: 3}
   - {fileID: 21300000, guid: 68e18b5583875504b8091d351d708776, type: 3}
-  - {fileID: 21300000, guid: 5cb55680eea65a5468acce72fbf8bf89, type: 3}
+  - {fileID: 21300000, guid: 7e4ab469089b2144a9e35296ec2f6ddf, type: 3}
+  - {fileID: 21300000, guid: 8b2b74ccb5840f34e80e21dfc406eb3d, type: 3}
   - {fileID: 21300000, guid: b19aaaef2373dfd46ab1120a18eb5144, type: 3}
   - {fileID: 21300000, guid: 67a9791792748984e97624227a3ca411, type: 3}
   - {fileID: 21300000, guid: c4eeab3bdcfe7074d9f92731e6bd3224, type: 3}
   m_PackedSpriteNamesToIndex:
   - Spanner
   - Rating_empty
-  - SilverIcon
+  - MissleItem
+  - DownButton
+  - FireButton
   - Plus
+  - Upbutton
   - RightJoystickBg
   - Coin-icon
-  - PlasticIcon
+  - BatteryBG
+  - Upgrade
   - MainHuman
   - RandomBarrier
   - drink

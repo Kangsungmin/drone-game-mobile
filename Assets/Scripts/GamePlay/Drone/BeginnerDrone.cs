@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class BeginnerDrone : Drone
@@ -29,7 +30,7 @@ public class BeginnerDrone : Drone
         playEnvironment = Ref[0];//Environment
         ui_Manager = Ref[1].GetComponent<UIManager>();
         moveJoystickLeft = Ref[2].GetComponent<VirtualJS_Left>();
-        moveJoystickRight = Ref[3].GetComponent<VirtualJS_Right>();
+        swipeController = Ref[3].GetComponent<SwipeController>();
         //파티클은 수동 할당요함.
         //드론의 하위 스크립트에도 레퍼런스 할당
         GameObject[] tempRef = new GameObject[3];
@@ -69,14 +70,7 @@ public class BeginnerDrone : Drone
         //*초기 비행 시에만 동작한다.
         ////추력을 사용자가 위로 올리기 시작하면 시동이 켜진다.
         //<<05.26수정>>
-        if (!droneStarting)
-        {
-            if (moveJoystickRight.Vertical() > 0.0f)
-            {
-                DronePowerOn = true;
-                droneStarting = true;
-            }
-        }
+
         //=============================드론 시동[끝]===============================
 
         //=============================드론 조작[시작]=============================
@@ -89,23 +83,13 @@ public class BeginnerDrone : Drone
             bodyDir.z = -40.0f * moveJoystickLeft.Horizontal();//몸체 좌우 회전
             bodyDir.x = 30.0f * moveJoystickLeft.Vertical();
             bodyDir.y = currentY;
-            bodyDir.y += 4.0f * moveJoystickRight.Horizontal();
+            bodyDir.y += 4.0f * swipeController.Horizontal();
             transform.eulerAngles = bodyDir;//Drone 오브젝트 좌우 회전 적용
 
-            if (flyDelay) StartCoroutine("AddCtrlToDrone", moveJoystickRight.Vertical()); //상하강 버튼을 누를시
-            if (moveJoystickLeft.Horizontal() + moveJoystickLeft.Vertical() + moveJoystickRight.Vertical() != 0.0f) AnimatorState = false;
+            //if (flyDelay) StartCoroutine("AddCtrlToDrone", moveJoystickRight.Vertical()); //상하강 버튼을 누를시
+            if (moveJoystickLeft.Horizontal() + moveJoystickLeft.Vertical() != 0.0f) AnimatorState = false;
             else AnimatorState = true;
-
-
-
-
-            transform.eulerAngles = bodyDir;//Drone 오브젝트 좌우 회전 적용
-                                            //if ((moveJoystickLeft.Vertical() != 0.0f) || (moveJoystickRight.Vertical() != 0.0f)) ; //Arming.AttackMode = false;
-                                            //좌측 조이스틱에 따른 날개 회전 애니메이션은 DroneAnim스크립트에서 처리한다.
-
-
-
-            //애니메이션
+            transform.eulerAngles = bodyDir;
 
         }
         //=============================드론 조작[끝]===============================
@@ -150,6 +134,15 @@ public class BeginnerDrone : Drone
     //*파라미터로는 1 ~ -1이 넘어온다.
     IEnumerator AddCtrlToDrone(float Up)
     {
+        if (!droneStarting)
+        {
+            if (Up>0.0f)
+            {
+                DronePowerOn = true;
+                droneStarting = true;
+            }
+        }
+
         flyDelay = false;
         if (DronePowerOn == false && Up > 0.0f) { Thrust = 40; DronePowerOn = true; }//드론 첫 동작시 초기 모터속도 1650
 
@@ -186,13 +179,6 @@ public class BeginnerDrone : Drone
         }
 
     }
-    
-    //=============================드론 충돌 판정[시작]=============================
-    //=============================드론 충돌 판정[끝]===============================
-
-    
-
-
 
     //=============================드론 연료함수[시작]=============================
     IEnumerator fuelControl()//연료 감소 메소드
@@ -219,6 +205,13 @@ public class BeginnerDrone : Drone
     }
     //=============================드론 연료함수[끝]===============================
 
+    public override void AddControll(float val)
+    {
+        if (flyDelay) StartCoroutine("AddCtrlToDrone", val);
+    }
+    
+
+
     //=============================연료 충전함수[시작]=============================
     public override void getFuel()
     {
@@ -241,7 +234,10 @@ public class BeginnerDrone : Drone
     {
         //랜덤하게 넘겨받은 아이템 스폰
         GameObject Item = Resources.Load("Prefabs/Items/"+ ItemName) as GameObject;
-        Item = Instantiate(Item, Claw.transform.position, Claw.transform.rotation);
+        Transform ClawRot = Claw.transform;
+        Quaternion rot = Quaternion.identity;
+        rot = Quaternion.Euler(0.0f, ClawRot.eulerAngles.y, ClawRot.eulerAngles.z);
+        Item = Instantiate(Item, Claw.transform.position, rot);
     }
 
 
